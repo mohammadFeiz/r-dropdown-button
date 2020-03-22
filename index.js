@@ -106,6 +106,7 @@ var RDropdownButton = /*#__PURE__*/function (_Component) {
       var title = this.getValue(this.props.title);
       var text = this.getValue(this.props.text);
       var iconClass = this.getValue(this.props.iconClass);
+      var iconStyle = this.getValue(this.props.iconStyle);
       var className = this.getValue(this.props.className);
       var badge = this.getValue(this.props.badge);
       var badgeStyle = this.getValue(this.props.badgeStyle);
@@ -134,7 +135,8 @@ var RDropdownButton = /*#__PURE__*/function (_Component) {
       }, badge > 99 ? '+99' : badge), iconClass && /*#__PURE__*/_react.default.createElement("div", {
         className: 'icon ' + iconClass,
         style: {
-          margin: text === undefined ? 0 : undefined
+          margin: text === undefined ? 0 : undefined,
+          ...iconStyle
         }
       }), text !== undefined && text, open && Array.isArray(items) && items.length > 0 && /*#__PURE__*/_react.default.createElement(Popup, null), open && typeof items === 'function' && /*#__PURE__*/_react.default.createElement(Popup, null)));
     }
@@ -321,7 +323,6 @@ var ListItem = /*#__PURE__*/function (_Component3) {
     value: function render() {
       var item = this.props.item;
       var _this$context3 = this.context,
-          checkable = _this$context3.checkable,
           rtl = _this$context3.rtl,
           getValue = _this$context3.getValue;
       var disabled = getValue(item.disabled);

@@ -27,6 +27,7 @@ class RDropdownButton extends Component {
         var title = this.getValue(this.props.title);
         var text = this.getValue(this.props.text); 
         var iconClass = this.getValue(this.props.iconClass); 
+        var iconStyle = this.getValue(this.props.iconStyle); 
         var className = this.getValue(this.props.className); 
         var badge = this.getValue(this.props.badge);  
         var badgeStyle = this.getValue(this.props.badgeStyle);  
@@ -47,7 +48,7 @@ class RDropdownButton extends Component {
           <dpContext.Provider value={contextValue}>
             <button {...props}>
               {parseInt(badge) > 0 && <div className='badge' style={badgeStyle}>{badge> 99 ?'+99':badge}</div>}
-              {iconClass && <div className={'icon ' + iconClass} style={{margin:text === undefined?0:undefined}}></div>}
+              {iconClass && <div className={'icon ' + iconClass} style={{margin:text === undefined?0:undefined,...iconStyle}}></div>}
               {text !== undefined && text}
               {open && Array.isArray(items) && items.length > 0 && <Popup />}
               {open && typeof items === 'function' && <Popup />}
@@ -143,7 +144,7 @@ class ListItem extends Component{
   }
   render(){
     var {item} = this.props;
-    var {checkable,rtl,getValue} = this.context;
+    var {rtl,getValue} = this.context;
     var disabled = getValue(item.disabled);
     var iconClass = getValue(item.iconClass);
     var href = getValue(item.href);
