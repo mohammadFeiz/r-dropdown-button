@@ -87,15 +87,15 @@ var RDropdownButton = /*#__PURE__*/function (_Component) {
       var _this$props = this.props,
           _this$props$items = _this$props.items,
           items = _this$props$items === void 0 ? [] : _this$props$items,
-          _this$props$callback = _this$props.callback,
-          callback = _this$props$callback === void 0 ? function () {} : _this$props$callback;
+          _this$props$onClick = _this$props.onClick,
+          onClick = _this$props$onClick === void 0 ? function () {} : _this$props$onClick;
 
       if (Array.isArray(items) && items.length) {
         this.toggle();
       } else if (typeof items === 'function') {
         this.toggle();
       } else {
-        callback(this.props);
+        onClick(this.props);
       }
     }
   }, {
@@ -298,7 +298,7 @@ var ListItem = /*#__PURE__*/function (_Component3) {
       var item = this.props.item;
       var _this$context2 = this.context,
           toggle = _this$context2.toggle,
-          callback = _this$context2.callback,
+          onClick = _this$context2.onClick,
           getValue = _this$context2.getValue;
       var disabled = getValue(item.disabled);
 
@@ -306,10 +306,10 @@ var ListItem = /*#__PURE__*/function (_Component3) {
         return;
       }
 
-      if (item.callback) {
-        item.callback(item, this.context);
-      } else if (callback) {
-        callback(item, this.context);
+      if (item.onClick) {
+        item.onClick(item, this.context);
+      } else if (onClick) {
+        onClick(item, this.context);
       }
 
       if (item.close !== false) {

@@ -16,10 +16,10 @@ class RDropdownButton extends Component {
       if(parent.length !== 0 ){
         return;
       }
-      var {items = [],callback = ()=>{}} = this.props;
+      var {items = [],onClick = ()=>{}} = this.props;
       if(Array.isArray(items) && items.length){this.toggle();}
       else if(typeof items === 'function'){this.toggle();}
-      else{callback(this.props);}
+      else{onClick(this.props);}
     }
     render(){
         var {items} = this.props;
@@ -134,11 +134,11 @@ class ListItem extends Component{
   static contextType = dpContext;
   click(){
     var {item} = this.props;
-    var {toggle,callback,getValue} = this.context;
+    var {toggle,onClick,getValue} = this.context;
     var disabled = getValue(item.disabled);
     if(disabled){return;}
-    if(item.callback){item.callback(item,this.context);}
-    else if(callback){callback(item,this.context);} 
+    if(item.onClick){item.onClick(item,this.context);}
+    else if(onClick){onClick(item,this.context);} 
     if(item.close !== false){toggle();}
   }
   render(){
