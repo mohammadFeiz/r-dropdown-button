@@ -62,6 +62,7 @@ class Popup extends Component{
   constructor(props){
     super(props);
     this.dom = createRef();
+    this.state = {searchValue:''}
   }
   update(){
     var {rtl} = this.context;
@@ -105,13 +106,26 @@ class Popup extends Component{
     return {height:'100%',width:'100%',right:0,top:0,position:'fixed'}
   }
   render(){
-    var {items,toggle,getValue} = this.context;
+    var {search,items,toggle,getValue} = this.context;
     var popupStyle = getValue(this.context.popupStyle);
-    var Items = typeof items === 'function'? items(this.context):items.map((item, i)=><ListItem key={i} item={item}/>)
+    var {searchValue} = this.state;
+    var Items = typeof items === 'function'? items(this.context):items.filter((item)=>{
+      if(!searchValue){return true;}
+      return item.text.indexOf(searchValue) !== -1
+    }).map((item, i)=><ListItem key={i} item={item}/>)
     return(
       <div className="r-dropdown-button-popup" ref={this.dom} style={this.getStyle(popupStyle)}>
         <div className='back-drop' onClick={toggle} style={this.getBackDropStyle()}></div> 
-        <div className="for-drop" style={popupStyle}>{Items}</div>
+        <div className="for-drop" style={popupStyle}>
+          {
+            search && 
+            <div className='r-dropdown-search'>
+            <div className='search-icon'></div>
+            <input type='text' value={searchValue} onChange={(e)=>this.setState({searchValue:e.target.value})}/>
+            </div>
+          }
+          {Items}
+        </div>
       </div>
     );
   }

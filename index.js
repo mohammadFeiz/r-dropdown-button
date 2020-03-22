@@ -159,6 +159,9 @@ var Popup = /*#__PURE__*/function (_Component2) {
 
     _this2 = _super2.call(this, props);
     _this2.dom = (0, _react.createRef)();
+    _this2.state = {
+      searchValue: ''
+    };
     return _this2;
   }
 
@@ -225,12 +228,22 @@ var Popup = /*#__PURE__*/function (_Component2) {
   }, {
     key: "render",
     value: function render() {
+      var _this3 = this;
+
       var _this$context = this.context,
+          search = _this$context.search,
           items = _this$context.items,
           toggle = _this$context.toggle,
           getValue = _this$context.getValue;
       var popupStyle = getValue(this.context.popupStyle);
-      var Items = typeof items === 'function' ? items(this.context) : items.map(function (item, i) {
+      var searchValue = this.state.searchValue;
+      var Items = typeof items === 'function' ? items(this.context) : items.filter(function (item) {
+        if (!searchValue) {
+          return true;
+        }
+
+        return item.text.indexOf(searchValue) !== -1;
+      }).map(function (item, i) {
         return /*#__PURE__*/_react.default.createElement(ListItem, {
           key: i,
           item: item
@@ -247,7 +260,19 @@ var Popup = /*#__PURE__*/function (_Component2) {
       }), /*#__PURE__*/_react.default.createElement("div", {
         className: "for-drop",
         style: popupStyle
-      }, Items));
+      }, search && /*#__PURE__*/_react.default.createElement("div", {
+        className: "r-dropdown-search"
+      }, /*#__PURE__*/_react.default.createElement("div", {
+        className: "search-icon"
+      }), /*#__PURE__*/_react.default.createElement("input", {
+        type: "text",
+        value: searchValue,
+        onChange: function onChange(e) {
+          return _this3.setState({
+            searchValue: e.target.value
+          });
+        }
+      })), Items));
     }
   }]);
 
