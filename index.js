@@ -133,7 +133,7 @@ var RDropdownButton = /*#__PURE__*/function (_Component) {
         className: "badge",
         style: badgeStyle
       }, badge > 99 ? '+99' : badge), iconClass && /*#__PURE__*/_react.default.createElement("div", {
-        className: 'icon ' + iconClass,
+        className: 'button-icon ' + iconClass,
         style: {
           margin: text === undefined ? 0 : undefined,
           ...iconStyle
@@ -323,10 +323,12 @@ var ListItem = /*#__PURE__*/function (_Component3) {
     value: function render() {
       var item = this.props.item;
       var _this$context3 = this.context,
+          checkable = _this$context3.checkable,
           rtl = _this$context3.rtl,
           getValue = _this$context3.getValue;
       var disabled = getValue(item.disabled);
       var iconClass = getValue(item.iconClass);
+      var iconStyle = getValue(item.iconStyle);
       var href = getValue(item.href);
       var checked = getValue(item.checked);
       var className = getValue(item.className);
@@ -338,9 +340,10 @@ var ListItem = /*#__PURE__*/function (_Component3) {
           textAlign: rtl ? 'right' : 'left'
         }
       }, iconClass && /*#__PURE__*/_react.default.createElement("div", {
-        className: 'icon ' + iconClass,
+        className: 'popup-icon ' + iconClass,
         style: {
-          margin: text === undefined ? 0 : undefined
+          margin: text === undefined ? 0 : undefined,
+          ...iconStyle
         }
       }), text) : /*#__PURE__*/_react.default.createElement("div", {
         className: "list-item".concat(className ? ' ' + className : '').concat(disabled ? ' disabled' : ''),
@@ -349,14 +352,15 @@ var ListItem = /*#__PURE__*/function (_Component3) {
           textAlign: rtl ? 'right' : 'left'
         }
       }, checked !== undefined && /*#__PURE__*/_react.default.createElement("div", {
-        className: "icon check-icon",
+        className: "check-icon",
         style: {
           opacity: checked ? 1 : 0
         }
       }), iconClass && /*#__PURE__*/_react.default.createElement("div", {
-        className: 'icon ' + iconClass,
+        className: 'popup-icon ' + iconClass,
         style: {
-          margin: text === undefined ? 0 : undefined
+          margin: text === undefined ? 0 : undefined,
+          ...iconStyle
         }
       }), text);
       return /*#__PURE__*/_react.default.createElement(_react.Fragment, null, item.splitter && /*#__PURE__*/_react.default.createElement("div", {

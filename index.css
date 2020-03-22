@@ -32,11 +32,24 @@
 .r-dropdown-button.rtl{
   direction:rtl;
 }
-.r-dropdown-button .icon{
+.r-dropdown-button .button-icon{
   margin-right:6px;
-
 }
-.r-dropdown-button.rtl .icon{
+.r-dropdown-button .popup-icon{
+  margin-right:6px;
+}
+.r-dropdown-button .check-icon{
+  margin-right:6px;
+}
+.r-dropdown-button.rtl .button-icon{
+  margin-right:unset;
+  margin-left:6px;
+}
+.r-dropdown-button.rtl .popup-icon{
+  margin-right:unset;
+  margin-left:6px;
+}
+.r-dropdown-button.rtl .check-icon{
   margin-right:unset;
   margin-left:6px;
 }

@@ -48,7 +48,7 @@ class RDropdownButton extends Component {
           <dpContext.Provider value={contextValue}>
             <button {...props}>
               {parseInt(badge) > 0 && <div className='badge' style={badgeStyle}>{badge> 99 ?'+99':badge}</div>}
-              {iconClass && <div className={'icon ' + iconClass} style={{margin:text === undefined?0:undefined,...iconStyle}}></div>}
+              {iconClass && <div className={'button-icon ' + iconClass} style={{margin:text === undefined?0:undefined,...iconStyle}}></div>}
               {text !== undefined && text}
               {open && Array.isArray(items) && items.length > 0 && <Popup />}
               {open && typeof items === 'function' && <Popup />}
@@ -144,9 +144,10 @@ class ListItem extends Component{
   }
   render(){
     var {item} = this.props;
-    var {rtl,getValue} = this.context;
+    var {checkable,rtl,getValue} = this.context;
     var disabled = getValue(item.disabled);
     var iconClass = getValue(item.iconClass);
+    var iconStyle = getValue(item.iconStyle);   
     var href = getValue(item.href);
     var checked = getValue(item.checked);
     var className = getValue(item.className);
@@ -160,7 +161,7 @@ class ListItem extends Component{
           textAlign:rtl?'right':'left',
         }}
       >
-        {iconClass && <div className={'icon ' + iconClass} style={{margin:text === undefined?0:undefined}}></div>}
+        {iconClass && <div className={'popup-icon ' + iconClass} style={{margin:text === undefined?0:undefined,...iconStyle}}></div>}
         {text}
       </a>
     )
@@ -173,8 +174,8 @@ class ListItem extends Component{
           textAlign:rtl?'right':'left',
         }}
       >
-        {checked !== undefined && <div className='icon check-icon' style={{opacity:checked?1:0}}></div>}
-        {iconClass && <div className={'icon ' + iconClass} style={{margin:text === undefined?0:undefined}}></div>}
+        {checked !== undefined && <div className='check-icon' style={{opacity:checked?1:0}}></div>}
+        {iconClass && <div className={'popup-icon ' + iconClass} style={{margin:text === undefined?0:undefined,...iconStyle}}></div>}
         {text}
       </div>
     );
