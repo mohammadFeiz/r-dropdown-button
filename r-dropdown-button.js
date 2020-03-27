@@ -16,9 +16,8 @@ class RDropdownButton extends Component {
       if(parent.length !== 0 ){
         return;
       }
-      var {items = [],onClick = ()=>{}} = this.props;
-      if(Array.isArray(items) && items.length){this.toggle();}
-      else if(typeof items === 'function'){this.toggle();}
+      var {items,onClick = ()=>{}} = this.props;
+      if(items){this.toggle();}
       else{onClick(this.props);}
     }
     render(){

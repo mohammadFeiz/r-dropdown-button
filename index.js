@@ -85,14 +85,11 @@ var RDropdownButton = /*#__PURE__*/function (_Component) {
       }
 
       var _this$props = this.props,
-          _this$props$items = _this$props.items,
-          items = _this$props$items === void 0 ? [] : _this$props$items,
+          items = _this$props.items,
           _this$props$onClick = _this$props.onClick,
           onClick = _this$props$onClick === void 0 ? function () {} : _this$props$onClick;
 
-      if (Array.isArray(items) && items.length) {
-        this.toggle();
-      } else if (typeof items === 'function') {
+      if (items) {
         this.toggle();
       } else {
         onClick(this.props);
