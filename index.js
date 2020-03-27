@@ -248,7 +248,8 @@ var Popup = /*#__PURE__*/function (_Component2) {
       }).map(function (item, i) {
         return /*#__PURE__*/_react.default.createElement(ListItem, {
           key: i,
-          item: item
+          item: item,
+          index: i
         });
       });
       return /*#__PURE__*/_react.default.createElement("div", {
@@ -297,7 +298,9 @@ var ListItem = /*#__PURE__*/function (_Component3) {
   _createClass(ListItem, [{
     key: "click",
     value: function click() {
-      var item = this.props.item;
+      var _this$props2 = this.props,
+          item = _this$props2.item,
+          index = _this$props2.index;
       var _this$context2 = this.context,
           toggle = _this$context2.toggle,
           onClick = _this$context2.onClick,
@@ -309,9 +312,9 @@ var ListItem = /*#__PURE__*/function (_Component3) {
       }
 
       if (item.onClick) {
-        item.onClick(item, this.context);
+        item.onClick(item, index, this.context);
       } else if (onClick) {
-        onClick(item, this.context);
+        onClick(item, index, this.context);
       }
 
       if (item.close !== false) {

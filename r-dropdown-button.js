@@ -113,7 +113,7 @@ class Popup extends Component{
     var Items = typeof items === 'function'? items(this.context):items.filter((item)=>{
       if(!searchValue){return true;}
       return item.text.indexOf(searchValue) !== -1
-    }).map((item, i)=><ListItem key={i} item={item}/>)
+    }).map((item, i)=><ListItem key={i} item={item} index={i}/>)
     return(
       <div className="r-dropdown-button-popup" ref={this.dom} style={this.getStyle(popupStyle)}>
         <div className='back-drop' onClick={toggle} style={this.getBackDropStyle()}></div> 
@@ -134,12 +134,12 @@ class Popup extends Component{
 class ListItem extends Component{
   static contextType = dpContext;
   click(){
-    var {item} = this.props;
+    var {item,index} = this.props;
     var {toggle,onClick,getValue} = this.context;
     var disabled = getValue(item.disabled);
     if(disabled){return;}
-    if(item.onClick){item.onClick(item,this.context);}
-    else if(onClick){onClick(item,this.context);} 
+    if(item.onClick){item.onClick(item,index,this.context);}
+    else if(onClick){onClick(item,index,this.context);} 
     if(item.close !== false){toggle();}
   }
   render(){
