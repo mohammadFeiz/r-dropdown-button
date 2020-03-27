@@ -142,9 +142,6 @@ var RDropdownButton = /*#__PURE__*/function (_Component) {
   return RDropdownButton;
 }(_react.Component);
 
-RDropdownButton.defaultProps = {
-  items: []
-};
 
 var Popup = /*#__PURE__*/function (_Component2) {
   _inherits(Popup, _Component2);

@@ -56,7 +56,6 @@ class RDropdownButton extends Component {
         );
     }    
 }
-RDropdownButton.defaultProps = {items:[]}
 class Popup extends Component{
   static contextType = dpContext;
   constructor(props){
