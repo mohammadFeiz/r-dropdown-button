@@ -9,7 +9,11 @@ class RDropdownButton extends Component {
       this.state = {open:this.props.open || false}
       this.dom = createRef();
     }
-    toggle(){this.setState({open:!this.state.open});}
+    toggle(){
+      this.setState({open:!this.state.open});
+      var {onBackdropClick} = this.props;
+      if(onBackdropClick){onBackdropClick(this.props)}
+    }
     getValue(value){return typeof value === 'function' ? value(this.props):value;}
     click(e){
       var parent = $(e.target).parents('.r-dropdown-button-popup');

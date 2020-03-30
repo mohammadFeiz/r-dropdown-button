@@ -69,6 +69,11 @@ var RDropdownButton = /*#__PURE__*/function (_Component) {
       this.setState({
         open: !this.state.open
       });
+      var onBackdropClick = this.props.onBackdropClick;
+
+      if (onBackdropClick) {
+        onBackdropClick(this.props);
+      }
     }
   }, {
     key: "getValue",
@@ -141,7 +146,6 @@ var RDropdownButton = /*#__PURE__*/function (_Component) {
 
   return RDropdownButton;
 }(_react.Component);
-
 
 var Popup = /*#__PURE__*/function (_Component2) {
   _inherits(Popup, _Component2);
