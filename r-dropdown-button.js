@@ -144,6 +144,12 @@ class ListItem extends Component{
     else if(onClick){onClick(item,index,this.context);} 
     if(item.close !== false){toggle();}
   }
+  getStyle(){
+    var {itemStyle = {},rtl} = this.context;
+    var ItemStyle = {...itemStyle};
+    ItemStyle.textAlign = rtl?'right':'left';
+    return ItemStyle;
+  }
   render(){
     var {item} = this.props;
     var {checkable,rtl,getValue} = this.context;
@@ -159,9 +165,7 @@ class ListItem extends Component{
       <a 
         className={`list-item${className?' ' + className:''}${disabled?' disabled':''}`} 
         href={href}
-        style={{
-          textAlign:rtl?'right':'left',
-        }}
+        style={this.getStyle()}
       >
         {iconClass && <div className={'popup-icon ' + iconClass} style={{margin:text === undefined?0:undefined,...iconStyle}}></div>}
         {text}
@@ -172,9 +176,7 @@ class ListItem extends Component{
       <div 
         className={`list-item${className?' ' + className:''}${disabled?' disabled':''}`} 
         onClick={this.click.bind(this)}
-        style={{
-          textAlign:rtl?'right':'left',
-        }}
+        style={this.getStyle()}
       >
         {checked !== undefined && <div className='check-icon' style={{opacity:checked?1:0}}></div>}
         {iconClass && <div className={'popup-icon ' + iconClass} style={{margin:text === undefined?0:undefined,...iconStyle}}></div>}

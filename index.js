@@ -320,13 +320,25 @@ var ListItem = /*#__PURE__*/function (_Component3) {
       }
     }
   }, {
+    key: "getStyle",
+    value: function getStyle() {
+      var _this$context3 = this.context,
+          _this$context3$itemSt = _this$context3.itemStyle,
+          itemStyle = _this$context3$itemSt === void 0 ? {} : _this$context3$itemSt,
+          rtl = _this$context3.rtl;
+      var ItemStyle = { ...itemStyle
+      };
+      ItemStyle.textAlign = rtl ? 'right' : 'left';
+      return ItemStyle;
+    }
+  }, {
     key: "render",
     value: function render() {
       var item = this.props.item;
-      var _this$context3 = this.context,
-          checkable = _this$context3.checkable,
-          rtl = _this$context3.rtl,
-          getValue = _this$context3.getValue;
+      var _this$context4 = this.context,
+          checkable = _this$context4.checkable,
+          rtl = _this$context4.rtl,
+          getValue = _this$context4.getValue;
       var disabled = getValue(item.disabled);
       var iconClass = getValue(item.iconClass);
       var iconStyle = getValue(item.iconStyle);
@@ -337,9 +349,7 @@ var ListItem = /*#__PURE__*/function (_Component3) {
       var Item = href ? /*#__PURE__*/_react.default.createElement("a", {
         className: "list-item".concat(className ? ' ' + className : '').concat(disabled ? ' disabled' : ''),
         href: href,
-        style: {
-          textAlign: rtl ? 'right' : 'left'
-        }
+        style: this.getStyle()
       }, iconClass && /*#__PURE__*/_react.default.createElement("div", {
         className: 'popup-icon ' + iconClass,
         style: {
@@ -349,9 +359,7 @@ var ListItem = /*#__PURE__*/function (_Component3) {
       }), text) : /*#__PURE__*/_react.default.createElement("div", {
         className: "list-item".concat(className ? ' ' + className : '').concat(disabled ? ' disabled' : ''),
         onClick: this.click.bind(this),
-        style: {
-          textAlign: rtl ? 'right' : 'left'
-        }
+        style: this.getStyle()
       }, checked !== undefined && /*#__PURE__*/_react.default.createElement("div", {
         className: "check-icon",
         style: {
