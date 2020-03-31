@@ -205,14 +205,14 @@ var Popup = /*#__PURE__*/function (_Component2) {
     }
   }, {
     key: "getStyle",
-    value: function getStyle(style) {
+    value: function getStyle() {
       var rtl = this.context.rtl;
-      return _jquery.default.extend({}, _defineProperty({
+      return _defineProperty({
         position: 'absolute',
         zIndex: 1000,
         top: '100%',
         direction: rtl ? 'rtl' : 'ltr'
-      }, rtl ? 'right' : 'left', 0), style);
+      }, rtl ? 'right' : 'left', 0);
     }
   }, {
     key: "getBackDropStyle",

@@ -95,15 +95,15 @@ class Popup extends Component{
   componentDidUpdate(){
     this.update();
   }
-  getStyle(style){
+  getStyle(){
     var {rtl} = this.context;
-    return $.extend({},{
+    return {
       position: 'absolute',
       zIndex:1000,
       top:'100%',
       direction:rtl?'rtl':'ltr',
       [rtl?'right':'left']:0,
-    },style);
+    };
   }
   getBackDropStyle(){
     return {height:'100%',width:'100%',right:0,top:0,position:'fixed'}
