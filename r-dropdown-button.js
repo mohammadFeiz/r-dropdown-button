@@ -68,17 +68,26 @@ class Popup extends Component{
     this.state = {searchValue:''}
   }
   update(){
-    var {rtl} = this.context;
+    var {rtl,openRelatedTo} = this.context;
     var popup = $(this.dom.current);
     var popupWidth = popup.width();
     var popupHeight = popup.height();
-    var bodyWidth = window.innerWidth;
-    var bodyHeight = window.innerHeight;
+    var parent = openRelatedTo?popup.parents().find(openRelatedTo):undefined;
+    parent = Array.isArray(parent) && parent.length === 0?undefined:parent;
+    var bodyWidth = parent?parent.width():window.innerWidth;
+    var bodyHeight = parent?parent.height():window.innerHeight;
     var offset = popup.offset();
     var popupLeft = offset.left;
     var popupRight = popupLeft + popupWidth;
     var popupTop = offset.top;
     var popupBottom = popupTop + popupHeight;
+    if(parent){
+      var parentOffset = parent.offset();
+      popupLeft -= parentOffset.left;
+      popupRight = popupLeft + popupWidth;
+      popupTop -= parentOffset.top;
+      popupBottom = popupTop + popupHeight;
+    }
     if(rtl && popupLeft < 0){
       popup.css('right',popupLeft - 36);
     }

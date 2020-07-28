@@ -29,7 +29,11 @@ function _defineProperties(target, props) { for (var i = 0; i < props.length; i+
 
 function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
 
-function _createSuper(Derived) { return function () { var Super = _getPrototypeOf(Derived), result; if (_isNativeReflectConstruct()) { var NewTarget = _getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
+
+function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
+
+function _createSuper(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct(); return function _createSuperInternal() { var Super = _getPrototypeOf(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = _getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
 
 function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
 
@@ -39,11 +43,7 @@ function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Re
 
 function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
 
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
-
-function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
-
-var dpContext = (0, _react.createContext)();
+var dpContext = /*#__PURE__*/(0, _react.createContext)();
 
 var RDropdownButton = /*#__PURE__*/function (_Component) {
   _inherits(RDropdownButton, _Component);
@@ -59,7 +59,7 @@ var RDropdownButton = /*#__PURE__*/function (_Component) {
     _this.state = {
       open: _this.props.open || false
     };
-    _this.dom = (0, _react.createRef)();
+    _this.dom = /*#__PURE__*/(0, _react.createRef)();
     return _this;
   }
 
@@ -158,7 +158,7 @@ var Popup = /*#__PURE__*/function (_Component2) {
     _classCallCheck(this, Popup);
 
     _this2 = _super2.call(this, props);
-    _this2.dom = (0, _react.createRef)();
+    _this2.dom = /*#__PURE__*/(0, _react.createRef)();
     _this2.state = {
       searchValue: ''
     };
@@ -168,17 +168,29 @@ var Popup = /*#__PURE__*/function (_Component2) {
   _createClass(Popup, [{
     key: "update",
     value: function update() {
-      var rtl = this.context.rtl;
+      var _this$context = this.context,
+          rtl = _this$context.rtl,
+          openRelatedTo = _this$context.openRelatedTo;
       var popup = (0, _jquery.default)(this.dom.current);
       var popupWidth = popup.width();
       var popupHeight = popup.height();
-      var bodyWidth = window.innerWidth;
-      var bodyHeight = window.innerHeight;
+      var parent = openRelatedTo ? popup.parents().find(openRelatedTo) : undefined;
+      parent = Array.isArray(parent) && parent.length === 0 ? undefined : parent;
+      var bodyWidth = parent ? parent.width() : window.innerWidth;
+      var bodyHeight = parent ? parent.height() : window.innerHeight;
       var offset = popup.offset();
       var popupLeft = offset.left;
       var popupRight = popupLeft + popupWidth;
       var popupTop = offset.top;
       var popupBottom = popupTop + popupHeight;
+
+      if (parent) {
+        var parentOffset = parent.offset();
+        popupLeft -= parentOffset.left;
+        popupRight = popupLeft + popupWidth;
+        popupTop -= parentOffset.top;
+        popupBottom = popupTop + popupHeight;
+      }
 
       if (rtl && popupLeft < 0) {
         popup.css('right', popupLeft - 36);
@@ -230,11 +242,11 @@ var Popup = /*#__PURE__*/function (_Component2) {
     value: function render() {
       var _this3 = this;
 
-      var _this$context = this.context,
-          search = _this$context.search,
-          items = _this$context.items,
-          toggle = _this$context.toggle,
-          getValue = _this$context.getValue;
+      var _this$context2 = this.context,
+          search = _this$context2.search,
+          items = _this$context2.items,
+          toggle = _this$context2.toggle,
+          getValue = _this$context2.getValue;
       var popupStyle = getValue(this.context.popupStyle);
       var searchValue = this.state.searchValue;
       var Items = typeof items === 'function' ? items(this.context) : items.filter(function (item) {
@@ -299,10 +311,10 @@ var ListItem = /*#__PURE__*/function (_Component3) {
       var _this$props2 = this.props,
           item = _this$props2.item,
           index = _this$props2.index;
-      var _this$context2 = this.context,
-          toggle = _this$context2.toggle,
-          onClick = _this$context2.onClick,
-          getValue = _this$context2.getValue;
+      var _this$context3 = this.context,
+          toggle = _this$context3.toggle,
+          onClick = _this$context3.onClick,
+          getValue = _this$context3.getValue;
       var disabled = getValue(item.disabled);
 
       if (disabled) {
@@ -322,10 +334,10 @@ var ListItem = /*#__PURE__*/function (_Component3) {
   }, {
     key: "getStyle",
     value: function getStyle() {
-      var _this$context3 = this.context,
-          _this$context3$itemSt = _this$context3.itemStyle,
-          itemStyle = _this$context3$itemSt === void 0 ? {} : _this$context3$itemSt,
-          rtl = _this$context3.rtl;
+      var _this$context4 = this.context,
+          _this$context4$itemSt = _this$context4.itemStyle,
+          itemStyle = _this$context4$itemSt === void 0 ? {} : _this$context4$itemSt,
+          rtl = _this$context4.rtl;
       var ItemStyle = { ...itemStyle
       };
       ItemStyle.textAlign = rtl ? 'right' : 'left';
@@ -335,10 +347,10 @@ var ListItem = /*#__PURE__*/function (_Component3) {
     key: "render",
     value: function render() {
       var item = this.props.item;
-      var _this$context4 = this.context,
-          checkable = _this$context4.checkable,
-          rtl = _this$context4.rtl,
-          getValue = _this$context4.getValue;
+      var _this$context5 = this.context,
+          checkable = _this$context5.checkable,
+          rtl = _this$context5.rtl,
+          getValue = _this$context5.getValue;
       var disabled = getValue(item.disabled);
       var iconClass = getValue(item.iconClass);
       var iconStyle = getValue(item.iconStyle);
