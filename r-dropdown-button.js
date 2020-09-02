@@ -72,7 +72,7 @@ class Popup extends Component{
     var popup = $(this.dom.current);
     var popupWidth = popup.width();
     var popupHeight = popup.height();
-    var parent = openRelatedTo?popup.parents().find(openRelatedTo):undefined;
+    var parent = openRelatedTo?popup.parents(openRelatedTo):undefined;
     parent = Array.isArray(parent) && parent.length === 0?undefined:parent;
     var bodyWidth = parent?parent.width():window.innerWidth;
     var bodyHeight = parent?parent.height():window.innerHeight;
@@ -133,7 +133,14 @@ class Popup extends Component{
             search && 
             <div className='r-dropdown-search'>
             <div className='search-icon'></div>
-            <input type='text' value={searchValue} onChange={(e)=>this.setState({searchValue:e.target.value})}/>
+            <input type='text' value={searchValue} onChange={(e)=>{
+                if(typeof search === 'function'){
+                  search(e.target.value);
+                  return;
+                }
+                this.setState({searchValue:e.target.value})
+              }}
+            />
             </div>
           }
           {Items}

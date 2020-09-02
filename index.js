@@ -174,7 +174,7 @@ var Popup = /*#__PURE__*/function (_Component2) {
       var popup = (0, _jquery.default)(this.dom.current);
       var popupWidth = popup.width();
       var popupHeight = popup.height();
-      var parent = openRelatedTo ? popup.parents().find(openRelatedTo) : undefined;
+      var parent = openRelatedTo ? popup.parents(openRelatedTo) : undefined;
       parent = Array.isArray(parent) && parent.length === 0 ? undefined : parent;
       var bodyWidth = parent ? parent.width() : window.innerWidth;
       var bodyHeight = parent ? parent.height() : window.innerHeight;
@@ -281,7 +281,12 @@ var Popup = /*#__PURE__*/function (_Component2) {
         type: "text",
         value: searchValue,
         onChange: function onChange(e) {
-          return _this3.setState({
+          if (typeof search === 'function') {
+            search(e.target.value);
+            return;
+          }
+
+          _this3.setState({
             searchValue: e.target.value
           });
         }
