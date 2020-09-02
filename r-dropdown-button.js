@@ -24,6 +24,14 @@ class RDropdownButton extends Component {
       if(items){this.toggle();}
       else{onClick(this.props);}
     }
+    showPopup(){
+      var {items} = this.props;
+      var {open} = this.state;
+      if(!open){return false;}
+      if(Array.isArray(items)){return true;}
+      if(typeof items === 'function'){return true;} 
+      return false
+    }
     render(){
         var {items} = this.props;
         var disabled = this.getValue(this.props.disabled);
@@ -53,8 +61,7 @@ class RDropdownButton extends Component {
               {parseInt(badge) > 0 && <div className='badge' style={badgeStyle}>{badge> 99 ?'+99':badge}</div>}
               {iconClass && <div className={'button-icon ' + iconClass} style={{margin:text === undefined?0:undefined,...iconStyle}}></div>}
               {text !== undefined && text}
-              {open && Array.isArray(items) && items.length > 0 && <Popup />}
-              {open && typeof items === 'function' && <Popup />}
+              {this.showPopup() && <Popup />}
             </button>
           </dpContext.Provider>
         );

@@ -101,6 +101,26 @@ var RDropdownButton = /*#__PURE__*/function (_Component) {
       }
     }
   }, {
+    key: "showPopup",
+    value: function showPopup() {
+      var items = this.props.items;
+      var open = this.state.open;
+
+      if (!open) {
+        return false;
+      }
+
+      if (Array.isArray(items)) {
+        return true;
+      }
+
+      if (typeof items === 'function') {
+        return true;
+      }
+
+      return false;
+    }
+  }, {
     key: "render",
     value: function render() {
       var items = this.props.items;
@@ -140,7 +160,7 @@ var RDropdownButton = /*#__PURE__*/function (_Component) {
           margin: text === undefined ? 0 : undefined,
           ...iconStyle
         }
-      }), text !== undefined && text, open && Array.isArray(items) && items.length > 0 && /*#__PURE__*/_react.default.createElement(Popup, null), open && typeof items === 'function' && /*#__PURE__*/_react.default.createElement(Popup, null)));
+      }), text !== undefined && text, this.showPopup() && /*#__PURE__*/_react.default.createElement(Popup, null)));
     }
   }]);
 
