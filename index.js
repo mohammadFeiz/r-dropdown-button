@@ -123,7 +123,9 @@ var RDropdownButton = /*#__PURE__*/function (_Component) {
   }, {
     key: "render",
     value: function render() {
-      var items = this.props.items;
+      var _this$props2 = this.props,
+          items = _this$props2.items,
+          id = _this$props2.id;
       var disabled = this.getValue(this.props.disabled);
       var title = this.getValue(this.props.title);
       var text = this.getValue(this.props.text);
@@ -140,6 +142,7 @@ var RDropdownButton = /*#__PURE__*/function (_Component) {
       contextValue.toggle = this.toggle.bind(this);
       contextValue.getValue = this.getValue.bind(this);
       var props = {
+        id: id,
         className: "r-dropdown-button ".concat(rtl ? 'rtl' : 'ltr').concat(className ? ' ' + className : ''),
         style: _jquery.default.extend({}, {
           direction: rtl ? 'rtl' : 'ltr'
@@ -333,9 +336,9 @@ var ListItem = /*#__PURE__*/function (_Component3) {
   _createClass(ListItem, [{
     key: "click",
     value: function click() {
-      var _this$props2 = this.props,
-          item = _this$props2.item,
-          index = _this$props2.index;
+      var _this$props3 = this.props,
+          item = _this$props3.item,
+          index = _this$props3.index;
       var _this$context3 = this.context,
           toggle = _this$context3.toggle,
           onClick = _this$context3.onClick,

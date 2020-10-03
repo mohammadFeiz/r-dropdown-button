@@ -33,7 +33,7 @@ class RDropdownButton extends Component {
       return false
     }
     render(){
-        var {items} = this.props;
+        var {items,id} = this.props;
         var disabled = this.getValue(this.props.disabled);
         var title = this.getValue(this.props.title);
         var text = this.getValue(this.props.text); 
@@ -49,6 +49,7 @@ class RDropdownButton extends Component {
         contextValue.toggle = this.toggle.bind(this);
         contextValue.getValue = this.getValue.bind(this);
         var props = {
+          id,
           className:`r-dropdown-button ${rtl?'rtl':'ltr'}${className?' ' + className:''}`,
           style:$.extend({},{direction:rtl?'rtl':'ltr'},this.getValue(style)),
           disabled,title,
