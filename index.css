@@ -1,10 +1,16 @@
+body.rdb-open{
+  overflow:hidden;
+}
 .r-dropdown-button{
   box-sizing: border-box;
   border:0;
   background:none;
   cursor:pointer;
   outline:0;
+  display:flex;
+  align-items:center;
   position:relative;
+  justify-content: center;
   width:fit-content;
   padding:3px 8px;
 }
@@ -32,28 +38,15 @@
 .r-dropdown-button.rtl{
   direction:rtl;
 }
-.r-dropdown-button .button-icon{
-  margin-right:6px;
+.r-dropdown-button .rdb-icon{
+  display:flex;
+  align-items: center;
+  justify-content: center;
+  height:100%;
 }
-.r-dropdown-button .popup-icon{
-  margin-right:6px;
-}
-.r-dropdown-button .check-icon{
-  margin-right:6px;
-}
-.r-dropdown-button.rtl .button-icon{
-  margin-right:unset;
-  margin-left:6px;
-}
-.r-dropdown-button.rtl .popup-icon{
-  margin-right:unset;
-  margin-left:6px;
-}
-.r-dropdown-button.rtl .check-icon{
-  margin-right:unset;
-  margin-left:6px;
-}
-.r-dropdown-button .list-item{
+
+
+.rdb-list-item{
   white-space:nowrap;
   width:100%;
   border:0;
@@ -64,15 +57,13 @@
   cursor:pointer;
   display:flex;
   color:#666;
-  justify-content:flex-start;
   align-items:center;
 }
 
-.r-dropdown-search{
+.rdb-search{
   z-index:10;
   padding:6px 3px;
   position:sticky;
-  box-shadow:0 0 0 6px #fff;
   background:#fff;
   box-sizing:border-box;
   height:36px;
@@ -83,7 +74,7 @@
   align-items:center;
   justify-content:center;
 }
-.r-dropdown-search input{
+.rdb-search input{
   outline:0;
   z-index:10;
   border:1px solid #bbb;
@@ -94,13 +85,17 @@
   width:100%;
   padding:3px;
 }
-.r-dropdown-search .search-icon{
+.rdb-search-icon{
   width:24px;
   height:24px;
   position:absolute;
   right:8px;
 }
-.r-dropdown-search .search-icon:before{
+.rdb-popup.rtl .rdb-search-icon{
+  right:unset;
+  left:8px;
+}
+.rdb-search-icon:before{
   position:absolute;
   content:'';
   width:8px;
@@ -110,7 +105,7 @@
   border:2px solid #888;
   border-radius:100%;
 }
-.r-dropdown-search .search-icon:after{
+.rdb-search-icon:after{
   position:absolute;
   content:'';
   width:6px;
@@ -121,55 +116,59 @@
   background:#888;
   
 }
-.r-dropdown-button .list-item.disabled{
+.rdb-list-item.disabled{
   opacity:.2;
   cursor: not-allowed;
 }
-.r-dropdown-button a.list-item{
+a.rdb-list-item{
   width: fill-available;
 }
-.r-dropdown-button .selective-item{
-  width:100%;
-  position:relative;
-  display:flex;
-  margin-bottom:6px;
+.rdb-popup{
+  position:fixed;
+  border : 1px solid #ccc;
+  box-shadow : 4px 4px 8px 0px rgba(0,0,0,.2);
+  background : #fff;
 }
+.rdb-for-drop{
+  position:relative;
+  overflow-y : auto;
+}
+.rdb-check-icon{
+  width:16px;
+  height:16px;
+  position:relative;
 
-  .r-dropdown-button .for-drop{
-    border : 1px solid #ccc;
-    box-shadow : 4px 4px 8px 0px rgba(0,0,0,.2);
-    background : #fff;
-    position:relative;
-    overflow-y : auto;
-  }
-  .r-dropdown-button .list-item .check-icon:before{
-    content:'\2714';
-  }
-  .r-dropdown-button .list-item:hover{
-    background:#97d0ff;
-    color:#fff;
-  }
-  .r-dropdown-button .splitter{
-    font-size:90%;
-    color:#aaa;
-    border-bottom:1px solid;
-    box-sizing: border-box;
-    width:100%;
-    padding-left:16px;
-    text-align:left;
-  }
-  .r-dropdown-button.rtl .splitter{
-    font-size:80%;
-    color:#aaa;
-    border-bottom:1px solid;
-    box-sizing: border-box;
-    width:100%;
-    padding-left:unset;
-    padding-right:16px;
-    text-align:right;
-  }
-
-.r-dropdown-button .badge{
+}
+.rdb-check-icon:before{
+  content:'';
+  position:absolute;
+  width:4px;
+  left:5px;
+  top:0px;
+  height:12px;
+  border:2px solid;
+  border-width:0px 2px 2px 0px; 
+  transform:rotate(36deg);
+}
+.rdb-list-item:hover{
+  background:#97d0ff;
+  color:#fff;
+}
+.rdb-splitter{
+  font-size:80%;
+  color:#aaa;
+  border-bottom:1px solid;
+  box-sizing: border-box;
+  width:100%;
+  padding-left:16px;
+  text-align:left;
+}
+.rdb-splitter.rtl{
+  padding-left:unset;
+  padding-right:16px;
+  text-align:right;
+}
+.rdb-badge{
   background:red;
   border-radius:6px;
   font-size:70%;
@@ -182,7 +181,7 @@
   bottom:calc(100% - 6px);
   padding:1px 3px;
 }
-.r-dropdown-button.rtl .badge{
+.r-dropdown-button.rtl .rdb-badge{
   left:unset;
   right:calc(100% - 12px);
 }

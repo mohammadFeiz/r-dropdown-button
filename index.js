@@ -1,5 +1,9 @@
 "use strict";
 
+function _instanceof(left, right) { if (right != null && typeof Symbol !== "undefined" && right[Symbol.hasInstance]) { return !!right[Symbol.hasInstance](left); } else { return left instanceof right; } }
+
+function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
@@ -13,15 +17,13 @@ require("./index.css");
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function () { return cache; }; return cache; }
+function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function _getRequireWildcardCache() { return cache; }; return cache; }
 
-function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
+
+function _extends() { _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends.apply(this, arguments); }
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
-
-function _instanceof(left, right) { if (right != null && typeof Symbol !== "undefined" && right[Symbol.hasInstance]) { return !!right[Symbol.hasInstance](left); } else { return left instanceof right; } }
-
-function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
 function _classCallCheck(instance, Constructor) { if (!_instanceof(instance, Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -66,9 +68,17 @@ var RDropdownButton = /*#__PURE__*/function (_Component) {
   _createClass(RDropdownButton, [{
     key: "toggle",
     value: function toggle() {
+      var state = !this.state.open;
       this.setState({
-        open: !this.state.open
+        open: state
       });
+
+      if (state) {
+        (0, _jquery.default)('body').addClass('rdb-open');
+      } else {
+        (0, _jquery.default)('body').removeClass('rdb-open');
+      }
+
       var onBackdropClick = this.props.onBackdropClick;
 
       if (onBackdropClick) {
@@ -83,7 +93,7 @@ var RDropdownButton = /*#__PURE__*/function (_Component) {
   }, {
     key: "click",
     value: function click(e) {
-      var parent = (0, _jquery.default)(e.target).parents('.r-dropdown-button-popup');
+      var parent = (0, _jquery.default)(e.target).parents('.rdb-popup');
 
       if (parent.length !== 0) {
         return;
@@ -121,23 +131,90 @@ var RDropdownButton = /*#__PURE__*/function (_Component) {
       return false;
     }
   }, {
+    key: "getIcon",
+    value: function getIcon(icon, iconClass, iconStyle) {
+      if (icon) {
+        return /*#__PURE__*/_react.default.createElement("div", {
+          className: 'rdb-icon',
+          style: iconStyle
+        }, icon);
+      }
+
+      if (iconClass) {
+        return /*#__PURE__*/_react.default.createElement("div", {
+          className: 'rdb-icon ' + iconClass,
+          style: iconStyle
+        });
+      }
+
+      return null;
+    }
+  }, {
+    key: "getBadge",
+    value: function getBadge() {
+      if (badge === undefined) {
+        return null;
+      }
+
+      var badge = parseInt(this.getValue(this.props.badge));
+
+      if (isNaN(badge)) {
+        console.error('RDropdownButton => badge props is not an number');
+        return null;
+      }
+
+      if (badge < 1) {
+        return null;
+      }
+
+      if (badge > 99) {
+        badge = '+99';
+      }
+
+      var badgeStyle = this.getValue(this.props.badgeStyle);
+      return /*#__PURE__*/_react.default.createElement("div", {
+        className: "rdb-badge",
+        style: badgeStyle
+      }, badge);
+    }
+  }, {
+    key: "getText",
+    value: function getText(text, icon) {
+      if (text === undefined || text === '') {
+        return '';
+      }
+
+      if (icon === null) {
+        return text;
+      }
+
+      var _this$props$gap = this.props.gap,
+          gap = _this$props$gap === void 0 ? 6 : _this$props$gap;
+      return /*#__PURE__*/_react.default.createElement(_react.Fragment, null, /*#__PURE__*/_react.default.createElement("div", {
+        className: "rdb-gap",
+        style: {
+          width: gap
+        }
+      }), text);
+    }
+  }, {
     key: "render",
     value: function render() {
-      var _this$props2 = this.props,
-          items = _this$props2.items,
-          id = _this$props2.id;
+      var id = this.getValue(this.props.id);
       var disabled = this.getValue(this.props.disabled);
       var title = this.getValue(this.props.title);
-      var text = this.getValue(this.props.text);
-      var iconClass = this.getValue(this.props.iconClass);
-      var iconStyle = this.getValue(this.props.iconStyle);
       var className = this.getValue(this.props.className);
-      var badge = this.getValue(this.props.badge);
-      var badgeStyle = this.getValue(this.props.badgeStyle);
       var rtl = this.getValue(this.props.rtl);
       var style = this.getValue(this.props.style);
-      var open = this.state.open;
-      var contextValue = { ...this.props
+      var icon = this.getValue(this.props.icon);
+      var iconClass = this.getValue(this.props.iconClass);
+      var iconStyle = this.getValue(this.props.iconStyle);
+      var text = this.getValue(this.props.text);
+      var Icon = this.getIcon(icon, iconClass, iconStyle);
+      var Text = this.getText(text, Icon);
+      var contextValue = { ...this.props,
+        getIcon: this.getIcon.bind(this),
+        getText: this.getText.bind(this)
       };
       contextValue.toggle = this.toggle.bind(this);
       contextValue.getValue = this.getValue.bind(this);
@@ -154,16 +231,7 @@ var RDropdownButton = /*#__PURE__*/function (_Component) {
       };
       return /*#__PURE__*/_react.default.createElement(dpContext.Provider, {
         value: contextValue
-      }, /*#__PURE__*/_react.default.createElement("button", props, parseInt(badge) > 0 && /*#__PURE__*/_react.default.createElement("div", {
-        className: "badge",
-        style: badgeStyle
-      }, badge > 99 ? '+99' : badge), iconClass && /*#__PURE__*/_react.default.createElement("div", {
-        className: 'button-icon ' + iconClass,
-        style: {
-          margin: text === undefined ? 0 : undefined,
-          ...iconStyle
-        }
-      }), text !== undefined && text, this.showPopup() && /*#__PURE__*/_react.default.createElement(Popup, null)));
+      }, /*#__PURE__*/_react.default.createElement("button", props, this.getBadge(), Icon, Text), this.showPopup() && /*#__PURE__*/_react.default.createElement(Popup, null));
     }
   }]);
 
@@ -189,45 +257,142 @@ var Popup = /*#__PURE__*/function (_Component2) {
   }
 
   _createClass(Popup, [{
+    key: "getLimit",
+    value: function getLimit(dom) {
+      var offset = dom.offset();
+      var left = offset.left - window.pageXOffset;
+      var top = offset.top - window.pageYOffset;
+      var width = dom.outerWidth();
+      var height = dom.outerHeight();
+      var right = left + width;
+      var bottom = top + height;
+      return {
+        left: left,
+        top: top,
+        right: right,
+        bottom: bottom,
+        width: width,
+        height: height
+      };
+    }
+  }, {
+    key: "preventScroll",
+    value: function preventScroll(e) {
+      e.preventDefault();
+    }
+  }, {
     key: "update",
     value: function update() {
       var _this$context = this.context,
           rtl = _this$context.rtl,
-          openRelatedTo = _this$context.openRelatedTo;
+          openRelatedTo = _this$context.openRelatedTo,
+          close = _this$context.close;
       var popup = (0, _jquery.default)(this.dom.current);
-      var popupWidth = popup.width();
-      var popupHeight = popup.height();
+      var button = popup.prev();
       var parent = openRelatedTo ? popup.parents(openRelatedTo) : undefined;
       parent = Array.isArray(parent) && parent.length === 0 ? undefined : parent;
-      var bodyWidth = parent ? parent.width() : window.innerWidth;
-      var bodyHeight = parent ? parent.height() : window.innerHeight;
-      var offset = popup.offset();
-      var popupLeft = offset.left;
-      var popupRight = popupLeft + popupWidth;
-      var popupTop = offset.top;
-      var popupBottom = popupTop + popupHeight;
+      var bodyWidth = window.innerWidth;
+      var bodyHeight = window.innerHeight;
+      var parentLimit = parent ? this.getLimit(parent) : {
+        left: 0,
+        top: 0,
+        right: bodyWidth,
+        bottom: bodyHeight
+      };
 
-      if (parent) {
-        var parentOffset = parent.offset();
-        popupLeft -= parentOffset.left;
-        popupRight = popupLeft + popupWidth;
-        popupTop -= parentOffset.top;
-        popupBottom = popupTop + popupHeight;
+      if (parentLimit.left < 0) {
+        parentLimit.left = 0;
       }
 
-      if (rtl && popupLeft < 0) {
-        popup.css('right', popupLeft - 36);
-      } else if (!rtl && popupRight > bodyWidth) {
-        popup.css('left', bodyWidth - popupRight - 36);
+      if (parentLimit.right > bodyWidth) {
+        parentLimit.right = bodyWidth;
       }
 
-      if (popupBottom > bodyHeight) {
-        popup.css({
-          'bottom': '100%',
-          'top': 'unset'
-        });
+      if (parentLimit.top < 0) {
+        parentLimit.top = 0;
       }
-    }
+
+      if (parentLimit.bottom > bodyHeight) {
+        parentLimit.bottom = bodyHeight;
+      }
+
+      var buttonLimit = this.getLimit(button);
+      var popupLimit = this.getLimit(popup);
+      var left,
+          right,
+          top,
+          bottom,
+          style = {};
+
+      if (rtl) {
+        right = buttonLimit.right;
+        top = buttonLimit.bottom;
+        left = right - popupLimit.width;
+        bottom = top + popupLimit.height;
+
+        if (left < parentLimit.left) {
+          style.left = parentLimit.left;
+        } else {
+          style.left = left;
+        }
+      } else {
+        left = buttonLimit.left;
+        top = buttonLimit.bottom;
+        right = left + popupLimit.width;
+        bottom = top + popupLimit.height;
+
+        if (right > parentLimit.right) {
+          style.left = parentLimit.right - popupLimit.width;
+        } else {
+          style.left = left;
+        }
+      }
+
+      if (bottom > parentLimit.bottom) {
+        if (popupLimit.height > buttonLimit.top - parentLimit.top) {
+          style.top = parentLimit.bottom - popupLimit.height;
+        } else {
+          style.top = buttonLimit.top - popupLimit.height;
+        }
+      } else {
+        style.top = buttonLimit.bottom;
+      }
+
+      popup.css(style);
+      (0, _jquery.default)('body').addClass('rdb-open');
+    } // update(){
+    //   return;
+    //   var {rtl,openRelatedTo} = this.context;
+    //   var popup = $(this.dom.current);
+    //   var popupWidth = popup.width();
+    //   var popupHeight = popup.height();
+    //   var parent = openRelatedTo?popup.parents(openRelatedTo):undefined;
+    //   parent = Array.isArray(parent) && parent.length === 0?undefined:parent;
+    //   var bodyWidth = parent?parent.width():window.innerWidth;
+    //   var bodyHeight = parent?parent.height():window.innerHeight;
+    //   var offset = popup.offset();
+    //   var popupLeft = offset.left;
+    //   var popupRight = popupLeft + popupWidth;
+    //   var popupTop = offset.top;
+    //   var popupBottom = popupTop + popupHeight;
+    //   if(parent){
+    //     var parentOffset = parent.offset();
+    //     popupLeft -= parentOffset.left;
+    //     popupRight = popupLeft + popupWidth;
+    //     popupTop -= parentOffset.top;
+    //     popupBottom = popupTop + popupHeight;
+    //   }
+    //   if(rtl && popupLeft < 0){
+    //     popup.css('right',popupLeft - 36);
+    //   }
+    //   else if(!rtl && popupRight > bodyWidth){
+    //     popup.css('left', bodyWidth - popupRight - 36);
+    //   }
+    //   if(popupBottom > bodyHeight){
+    //     popup.css({'bottom':'100%','top':'unset'});
+    //   }
+    // }
+
   }, {
     key: "componentDidMount",
     value: function componentDidMount() {
@@ -242,12 +407,10 @@ var Popup = /*#__PURE__*/function (_Component2) {
     key: "getStyle",
     value: function getStyle() {
       var rtl = this.context.rtl;
-      return _defineProperty({
-        position: 'absolute',
+      return {
         zIndex: 1000,
-        top: '100%',
         direction: rtl ? 'rtl' : 'ltr'
-      }, rtl ? 'right' : 'left', 0);
+      };
     }
   }, {
     key: "getBackDropStyle",
@@ -269,7 +432,8 @@ var Popup = /*#__PURE__*/function (_Component2) {
           search = _this$context2.search,
           items = _this$context2.items,
           toggle = _this$context2.toggle,
-          getValue = _this$context2.getValue;
+          getValue = _this$context2.getValue,
+          rtl = _this$context2.rtl;
       var popupStyle = getValue(this.context.popupStyle);
       var searchValue = this.state.searchValue;
       var Items = typeof items === 'function' ? items(this.context) : items.filter(function (item) {
@@ -286,20 +450,19 @@ var Popup = /*#__PURE__*/function (_Component2) {
         });
       });
       return /*#__PURE__*/_react.default.createElement("div", {
-        className: "r-dropdown-button-popup",
+        className: "rdb-popup " + (rtl ? ' rtl' : ' ltr'),
         ref: this.dom,
-        style: this.getStyle(popupStyle)
+        style: this.getStyle()
       }, /*#__PURE__*/_react.default.createElement("div", {
-        className: "back-drop",
         onClick: toggle,
         style: this.getBackDropStyle()
       }), /*#__PURE__*/_react.default.createElement("div", {
-        className: "for-drop",
+        className: "rdb-for-drop",
         style: popupStyle
       }, search && /*#__PURE__*/_react.default.createElement("div", {
-        className: "r-dropdown-search"
+        className: "rdb-search"
       }, /*#__PURE__*/_react.default.createElement("div", {
-        className: "search-icon"
+        className: "rdb-search-icon"
       }), /*#__PURE__*/_react.default.createElement("input", {
         type: "text",
         value: searchValue,
@@ -336,9 +499,9 @@ var ListItem = /*#__PURE__*/function (_Component3) {
   _createClass(ListItem, [{
     key: "click",
     value: function click() {
-      var _this$props3 = this.props,
-          item = _this$props3.item,
-          index = _this$props3.index;
+      var _this$props2 = this.props,
+          item = _this$props2.item,
+          index = _this$props2.index;
       var _this$context3 = this.context,
           toggle = _this$context3.toggle,
           onClick = _this$context3.onClick,
@@ -360,61 +523,45 @@ var ListItem = /*#__PURE__*/function (_Component3) {
       }
     }
   }, {
-    key: "getStyle",
-    value: function getStyle() {
-      var _this$context4 = this.context,
-          _this$context4$itemSt = _this$context4.itemStyle,
-          itemStyle = _this$context4$itemSt === void 0 ? {} : _this$context4$itemSt,
-          rtl = _this$context4.rtl;
-      var ItemStyle = { ...itemStyle
-      };
-      ItemStyle.textAlign = rtl ? 'right' : 'left';
-      return ItemStyle;
-    }
-  }, {
     key: "render",
     value: function render() {
       var item = this.props.item;
-      var _this$context5 = this.context,
-          checkable = _this$context5.checkable,
-          rtl = _this$context5.rtl,
-          getValue = _this$context5.getValue;
+      var _this$context4 = this.context,
+          getValue = _this$context4.getValue,
+          getIcon = _this$context4.getIcon,
+          getText = _this$context4.getText,
+          itemStyle = _this$context4.itemStyle,
+          _this$context4$gap = _this$context4.gap,
+          gap = _this$context4$gap === void 0 ? 6 : _this$context4$gap,
+          rtl = _this$context4.rtl;
       var disabled = getValue(item.disabled);
-      var iconClass = getValue(item.iconClass);
-      var iconStyle = getValue(item.iconStyle);
-      var href = getValue(item.href);
-      var checked = getValue(item.checked);
-      var className = getValue(item.className);
       var text = getValue(item.text);
-      var Item = href ? /*#__PURE__*/_react.default.createElement("a", {
-        className: "list-item".concat(className ? ' ' + className : '').concat(disabled ? ' disabled' : ''),
-        href: href,
-        style: this.getStyle()
-      }, iconClass && /*#__PURE__*/_react.default.createElement("div", {
-        className: 'popup-icon ' + iconClass,
-        style: {
-          margin: text === undefined ? 0 : undefined,
-          ...iconStyle
-        }
-      }), text) : /*#__PURE__*/_react.default.createElement("div", {
-        className: "list-item".concat(className ? ' ' + className : '').concat(disabled ? ' disabled' : ''),
-        onClick: this.click.bind(this),
-        style: this.getStyle()
-      }, checked !== undefined && /*#__PURE__*/_react.default.createElement("div", {
-        className: "check-icon",
+      var checked = getValue(item.checked);
+      var Icon = getIcon(item.icon, item.iconClass, item.iconStyle);
+      var Text = getText(text, Icon);
+      var CheckIcon = checked !== undefined ? /*#__PURE__*/_react.default.createElement(_react.Fragment, null, /*#__PURE__*/_react.default.createElement("div", {
+        className: "rdb-check-icon",
         style: {
           opacity: checked ? 1 : 0
         }
-      }), iconClass && /*#__PURE__*/_react.default.createElement("div", {
-        className: 'popup-icon ' + iconClass,
+      }), /*#__PURE__*/_react.default.createElement("div", {
+        className: "rdb-gap",
         style: {
-          margin: text === undefined ? 0 : undefined,
-          ...iconStyle
+          width: gap
         }
-      }), text);
+      })) : null;
+      var href = getValue(item.href);
+      var className = getValue(item.className);
+      var props = {
+        className: "rdb-list-item".concat(className ? ' ' + className : '').concat(disabled ? ' disabled' : ''),
+        style: getValue(itemStyle),
+        onClick: this.click.bind(this)
+      };
       return /*#__PURE__*/_react.default.createElement(_react.Fragment, null, item.splitter && /*#__PURE__*/_react.default.createElement("div", {
-        className: "splitter"
-      }, item.splitter), Item);
+        className: 'rdb-splitter ' + (rtl ? 'rtl' : 'ltr')
+      }, item.splitter), href ? /*#__PURE__*/_react.default.createElement("a", _extends({
+        href: href
+      }, props), Icon, Text) : /*#__PURE__*/_react.default.createElement("div", props, CheckIcon, Icon, Text));
     }
   }]);
 
