@@ -131,7 +131,7 @@ class Popup extends Component{
     e.preventDefault();
   }
   update(){
-    var {rtl,openRelatedTo,close} = this.context;
+    var {rtl,openRelatedTo,close,animate} = this.context;
     var popup = $(this.dom.current);
     var button = popup.prev();
     var parent = openRelatedTo?popup.parents(openRelatedTo):undefined;
@@ -170,8 +170,13 @@ class Popup extends Component{
     else{
       style.top = buttonLimit.bottom;
     }
-    popup.css({...style,opacity:0,top:style.top + 60})
-    popup.animate({top:style.top,opacity:1},{duration:150})
+    if(animate){
+      popup.css({...style,opacity:0,top:style.top + 60})
+      popup.animate({top:style.top,opacity:1},{duration:150})
+    }
+    else{
+      popup.css(style)
+    }
     $('body').addClass('rdb-open');
   }
   // update(){
@@ -223,7 +228,7 @@ class Popup extends Component{
     return {height:'100%',width:'100%',right:0,top:0,position:'fixed',background:'rgba(0,0,0,0)'}
   }
   render(){
-    var {search,items,toggle,getValue,rtl,hover} = this.context;
+    var {search,items,toggle,getValue,rtl,hover,className} = this.context;
     var popupStyle = getValue(this.context.popupStyle);
     var {searchValue} = this.state;
     var Items = typeof items === 'function'? items(this.context):items.filter((item)=>{
@@ -231,7 +236,7 @@ class Popup extends Component{
       return item.text.indexOf(searchValue) !== -1
     }).map((item, i)=><ListItem key={i} item={item} index={i}/>)
     return(
-      <div className={"rdb-popup " + (rtl?' rtl':' ltr')} ref={this.dom} style={this.getStyle()} onMouseEnter={()=>{if(hover){toggle(true)}}} onMouseLeave={()=>{if(hover){toggle(false)}}}>
+      <div className={"rdb-popup " + (className?' ' + className + '-popup':'') + (rtl?' rtl':' ltr')} ref={this.dom} style={this.getStyle()} onMouseEnter={()=>{if(hover){toggle(true)}}} onMouseLeave={()=>{if(hover){toggle(false)}}}>
         {!hover && <div onClick={()=>toggle(false)} style={this.getBackDropStyle()}></div>} 
         <div className="rdb-for-drop" style={popupStyle}>
           {

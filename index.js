@@ -315,7 +315,8 @@ var Popup = /*#__PURE__*/function (_Component2) {
       var _this$context = this.context,
           rtl = _this$context.rtl,
           openRelatedTo = _this$context.openRelatedTo,
-          close = _this$context.close;
+          close = _this$context.close,
+          animate = _this$context.animate;
       var popup = (0, _jquery.default)(this.dom.current);
       var button = popup.prev();
       var parent = openRelatedTo ? popup.parents(openRelatedTo) : undefined;
@@ -387,16 +388,21 @@ var Popup = /*#__PURE__*/function (_Component2) {
         style.top = buttonLimit.bottom;
       }
 
-      popup.css({ ...style,
-        opacity: 0,
-        top: style.top + 60
-      });
-      popup.animate({
-        top: style.top,
-        opacity: 1
-      }, {
-        duration: 150
-      });
+      if (animate) {
+        popup.css({ ...style,
+          opacity: 0,
+          top: style.top + 60
+        });
+        popup.animate({
+          top: style.top,
+          opacity: 1
+        }, {
+          duration: 150
+        });
+      } else {
+        popup.css(style);
+      }
+
       (0, _jquery.default)('body').addClass('rdb-open');
     } // update(){
     //   return;
@@ -473,7 +479,8 @@ var Popup = /*#__PURE__*/function (_Component2) {
           toggle = _this$context2.toggle,
           getValue = _this$context2.getValue,
           rtl = _this$context2.rtl,
-          hover = _this$context2.hover;
+          hover = _this$context2.hover,
+          className = _this$context2.className;
       var popupStyle = getValue(this.context.popupStyle);
       var searchValue = this.state.searchValue;
       var Items = typeof items === 'function' ? items(this.context) : items.filter(function (item) {
@@ -490,7 +497,7 @@ var Popup = /*#__PURE__*/function (_Component2) {
         });
       });
       return /*#__PURE__*/_react.default.createElement("div", {
-        className: "rdb-popup " + (rtl ? ' rtl' : ' ltr'),
+        className: "rdb-popup " + (className ? ' ' + className + '-popup' : '') + (rtl ? ' rtl' : ' ltr'),
         ref: this.dom,
         style: this.getStyle(),
         onMouseEnter: function onMouseEnter() {
