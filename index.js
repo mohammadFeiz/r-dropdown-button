@@ -62,28 +62,38 @@ var RDropdownButton = /*#__PURE__*/function (_Component) {
       open: _this.props.open || false
     };
     _this.dom = /*#__PURE__*/(0, _react.createRef)();
+    _this.touch = 'ontouchstart' in document.documentElement;
     return _this;
   }
 
   _createClass(RDropdownButton, [{
     key: "toggle",
     value: function toggle() {
-      var state = !this.state.open;
-      this.setState({
-        open: state
-      });
+      var _this2 = this;
 
-      if (state) {
-        (0, _jquery.default)('body').addClass('rdb-open');
-      } else {
-        (0, _jquery.default)('body').removeClass('rdb-open');
-      }
+      var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : !this.state.open;
+      clearTimeout(this.timeOut);
+      this.timeOut = setTimeout(function () {
+        if (state === _this2.state.open) {
+          return;
+        }
 
-      var onBackdropClick = this.props.onBackdropClick;
+        _this2.setState({
+          open: state
+        });
 
-      if (onBackdropClick) {
-        onBackdropClick(this.props);
-      }
+        if (state) {
+          (0, _jquery.default)('body').addClass('rdb-open');
+        } else {
+          (0, _jquery.default)('body').removeClass('rdb-open');
+        }
+
+        var onBackdropClick = _this2.props.onBackdropClick;
+
+        if (onBackdropClick) {
+          onBackdropClick(_this2.props);
+        }
+      }, 100);
     }
   }, {
     key: "getValue",
@@ -198,8 +208,19 @@ var RDropdownButton = /*#__PURE__*/function (_Component) {
       }), text);
     }
   }, {
+    key: "getHoverEnabled",
+    value: function getHoverEnabled() {
+      if (this.touch) {
+        return false;
+      }
+
+      return this.getValue(this.props.hover);
+    }
+  }, {
     key: "render",
     value: function render() {
+      var _this3 = this;
+
       var id = this.getValue(this.props.id);
       var disabled = this.getValue(this.props.disabled);
       var title = this.getValue(this.props.title);
@@ -212,12 +233,14 @@ var RDropdownButton = /*#__PURE__*/function (_Component) {
       var text = this.getValue(this.props.text);
       var Icon = this.getIcon(icon, iconClass, iconStyle);
       var Text = this.getText(text, Icon);
+      var hover = this.getHoverEnabled();
       var contextValue = { ...this.props,
         getIcon: this.getIcon.bind(this),
         getText: this.getText.bind(this)
       };
       contextValue.toggle = this.toggle.bind(this);
       contextValue.getValue = this.getValue.bind(this);
+      contextValue.hover = hover;
       var props = {
         id: id,
         className: "r-dropdown-button ".concat(rtl ? 'rtl' : 'ltr').concat(className ? ' ' + className : ''),
@@ -227,7 +250,13 @@ var RDropdownButton = /*#__PURE__*/function (_Component) {
         disabled: disabled,
         title: title,
         ref: this.dom,
-        onClick: this.click.bind(this)
+        onClick: this.click.bind(this),
+        onMouseEnter: hover ? function () {
+          return _this3.toggle(true);
+        } : undefined,
+        onMouseLeave: hover ? function () {
+          return _this3.toggle(false);
+        } : undefined
       };
       return /*#__PURE__*/_react.default.createElement(dpContext.Provider, {
         value: contextValue
@@ -244,16 +273,16 @@ var Popup = /*#__PURE__*/function (_Component2) {
   var _super2 = _createSuper(Popup);
 
   function Popup(props) {
-    var _this2;
+    var _this4;
 
     _classCallCheck(this, Popup);
 
-    _this2 = _super2.call(this, props);
-    _this2.dom = /*#__PURE__*/(0, _react.createRef)();
-    _this2.state = {
+    _this4 = _super2.call(this, props);
+    _this4.dom = /*#__PURE__*/(0, _react.createRef)();
+    _this4.state = {
       searchValue: ''
     };
-    return _this2;
+    return _this4;
   }
 
   _createClass(Popup, [{
@@ -358,7 +387,16 @@ var Popup = /*#__PURE__*/function (_Component2) {
         style.top = buttonLimit.bottom;
       }
 
-      popup.css(style);
+      popup.css({ ...style,
+        opacity: 0,
+        top: style.top + 60
+      });
+      popup.animate({
+        top: style.top,
+        opacity: 1
+      }, {
+        duration: 150
+      });
       (0, _jquery.default)('body').addClass('rdb-open');
     } // update(){
     //   return;
@@ -420,20 +458,22 @@ var Popup = /*#__PURE__*/function (_Component2) {
         width: '100%',
         right: 0,
         top: 0,
-        position: 'fixed'
+        position: 'fixed',
+        background: 'rgba(0,0,0,0)'
       };
     }
   }, {
     key: "render",
     value: function render() {
-      var _this3 = this;
+      var _this5 = this;
 
       var _this$context2 = this.context,
           search = _this$context2.search,
           items = _this$context2.items,
           toggle = _this$context2.toggle,
           getValue = _this$context2.getValue,
-          rtl = _this$context2.rtl;
+          rtl = _this$context2.rtl,
+          hover = _this$context2.hover;
       var popupStyle = getValue(this.context.popupStyle);
       var searchValue = this.state.searchValue;
       var Items = typeof items === 'function' ? items(this.context) : items.filter(function (item) {
@@ -452,9 +492,21 @@ var Popup = /*#__PURE__*/function (_Component2) {
       return /*#__PURE__*/_react.default.createElement("div", {
         className: "rdb-popup " + (rtl ? ' rtl' : ' ltr'),
         ref: this.dom,
-        style: this.getStyle()
-      }, /*#__PURE__*/_react.default.createElement("div", {
-        onClick: toggle,
+        style: this.getStyle(),
+        onMouseEnter: function onMouseEnter() {
+          if (hover) {
+            toggle(true);
+          }
+        },
+        onMouseLeave: function onMouseLeave() {
+          if (hover) {
+            toggle(false);
+          }
+        }
+      }, !hover && /*#__PURE__*/_react.default.createElement("div", {
+        onClick: function onClick() {
+          return toggle(false);
+        },
         style: this.getBackDropStyle()
       }), /*#__PURE__*/_react.default.createElement("div", {
         className: "rdb-for-drop",
@@ -472,7 +524,7 @@ var Popup = /*#__PURE__*/function (_Component2) {
             return;
           }
 
-          _this3.setState({
+          _this5.setState({
             searchValue: e.target.value
           });
         }

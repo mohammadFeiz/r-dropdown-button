@@ -127,11 +127,14 @@ a.rdb-list-item{
   position:fixed;
   border : 1px solid #ccc;
   box-shadow : 4px 4px 8px 0px rgba(0,0,0,.2);
-  background : #fff;
+  
+  top:100%;
+  opacity:0;
 }
 .rdb-for-drop{
   position:relative;
   overflow-y : auto;
+  background : #fff;
 }
 .rdb-check-icon{
   width:16px;

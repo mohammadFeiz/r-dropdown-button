@@ -8,25 +8,27 @@ class RDropdownButton extends Component {
       super(props);
       this.state = {open:this.props.open || false}
       this.dom = createRef();
+      this.touch = 'ontouchstart' in document.documentElement;
     }
-    toggle(){
-      var state = !this.state.open;
-      this.setState({open:state});
-      if(state){
-        $('body').addClass('rdb-open'); 
-      }
-      else{
-        $('body').removeClass('rdb-open'); 
-      }
-      var {onBackdropClick} = this.props;
-      if(onBackdropClick){onBackdropClick(this.props)}
+    toggle(state = !this.state.open){
+      clearTimeout(this.timeOut);
+      this.timeOut = setTimeout(()=>{
+        if(state === this.state.open){return}
+        this.setState({open:state});
+        if(state){
+          $('body').addClass('rdb-open'); 
+        }
+        else{
+          $('body').removeClass('rdb-open'); 
+        }
+        var {onBackdropClick} = this.props;
+        if(onBackdropClick){onBackdropClick(this.props)}
+      },100)
     }
     getValue(value){return typeof value === 'function' ? value(this.props):value;}
     click(e){
       var parent = $(e.target).parents('.rdb-popup');
-      if(parent.length !== 0 ){
-        return;
-      }
+      if(parent.length !== 0 ){return;}
       var {items,onClick = ()=>{}} = this.props;
       if(items){this.toggle();}
       else{onClick(this.props);}
@@ -68,6 +70,10 @@ class RDropdownButton extends Component {
         </Fragment>
       )
     }
+    getHoverEnabled(){
+      if(this.touch){return false}
+      return this.getValue(this.props.hover);
+    }
     render(){
         var id = this.getValue(this.props.id);
         var disabled = this.getValue(this.props.disabled);
@@ -81,16 +87,20 @@ class RDropdownButton extends Component {
         var text = this.getValue(this.props.text); 
         var Icon = this.getIcon(icon,iconClass,iconStyle);
         var Text = this.getText(text,Icon); 
+        var hover = this.getHoverEnabled();
         var contextValue = {...this.props,getIcon:this.getIcon.bind(this),getText:this.getText.bind(this)};
         contextValue.toggle = this.toggle.bind(this);
         contextValue.getValue = this.getValue.bind(this);
+        contextValue.hover = hover
         var props = {
           id,
           className:`r-dropdown-button ${rtl?'rtl':'ltr'}${className?' ' + className:''}`,
           style:$.extend({},{direction:rtl?'rtl':'ltr'},this.getValue(style)),
           disabled,title,
           ref:this.dom,
-          onClick:this.click.bind(this)
+          onClick:this.click.bind(this),
+          onMouseEnter:hover?()=>this.toggle(true):undefined,
+          onMouseLeave:hover?()=>this.toggle(false):undefined
         }
         return (
           <dpContext.Provider value={contextValue}>
@@ -160,7 +170,8 @@ class Popup extends Component{
     else{
       style.top = buttonLimit.bottom;
     }
-    popup.css(style);
+    popup.css({...style,opacity:0,top:style.top + 60})
+    popup.animate({top:style.top,opacity:1},{duration:150})
     $('body').addClass('rdb-open');
   }
   // update(){
@@ -209,10 +220,10 @@ class Popup extends Component{
     };
   }
   getBackDropStyle(){
-    return {height:'100%',width:'100%',right:0,top:0,position:'fixed'}
+    return {height:'100%',width:'100%',right:0,top:0,position:'fixed',background:'rgba(0,0,0,0)'}
   }
   render(){
-    var {search,items,toggle,getValue,rtl} = this.context;
+    var {search,items,toggle,getValue,rtl,hover} = this.context;
     var popupStyle = getValue(this.context.popupStyle);
     var {searchValue} = this.state;
     var Items = typeof items === 'function'? items(this.context):items.filter((item)=>{
@@ -220,8 +231,8 @@ class Popup extends Component{
       return item.text.indexOf(searchValue) !== -1
     }).map((item, i)=><ListItem key={i} item={item} index={i}/>)
     return(
-      <div className={"rdb-popup " + (rtl?' rtl':' ltr')} ref={this.dom} style={this.getStyle()}>
-        <div onClick={toggle} style={this.getBackDropStyle()}></div> 
+      <div className={"rdb-popup " + (rtl?' rtl':' ltr')} ref={this.dom} style={this.getStyle()} onMouseEnter={()=>{if(hover){toggle(true)}}} onMouseLeave={()=>{if(hover){toggle(false)}}}>
+        {!hover && <div onClick={()=>toggle(false)} style={this.getBackDropStyle()}></div>} 
         <div className="rdb-for-drop" style={popupStyle}>
           {
             search && 
