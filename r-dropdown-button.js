@@ -236,7 +236,7 @@ class Popup extends Component{
       return item.text.indexOf(searchValue) !== -1
     }).map((item, i)=><ListItem key={i} item={item} index={i}/>)
     return(
-      <div className={"rdb-popup " + (className?' ' + className + '-popup':'') + (rtl?' rtl':' ltr')} ref={this.dom} style={this.getStyle()} onMouseEnter={()=>{if(hover){toggle(true)}}} onMouseLeave={()=>{if(hover){toggle(false)}}}>
+      <div className={"rdb-popup" + (className?' ' + className.trim() + '-popup':'') + (rtl?' rtl':' ltr')} ref={this.dom} style={this.getStyle()} onMouseEnter={()=>{if(hover){toggle(true)}}} onMouseLeave={()=>{if(hover){toggle(false)}}}>
         {!hover && <div onClick={()=>toggle(false)} style={this.getBackDropStyle()}></div>} 
         <div className="rdb-for-drop" style={popupStyle}>
           {
