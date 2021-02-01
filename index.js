@@ -115,7 +115,7 @@ var RDropdownButton = /*#__PURE__*/function (_Component) {
           onClick = _this$props$onClick === void 0 ? function () {} : _this$props$onClick;
 
       if (items) {
-        this.toggle();
+        this.toggle(true);
       } else {
         onClick(this.props);
       }
@@ -480,8 +480,7 @@ var Popup = /*#__PURE__*/function (_Component2) {
           getValue = _this$context2.getValue,
           rtl = _this$context2.rtl,
           hover = _this$context2.hover,
-          popupClassName = _this$context2.popupClassName
-          className = _this$context2.className;
+          popupClassName = _this$context2.popupClassName;
       var popupStyle = getValue(this.context.popupStyle);
       var searchValue = this.state.searchValue;
       var Items = typeof items === 'function' ? items(this.context) : items.filter(function (item) {
@@ -498,7 +497,7 @@ var Popup = /*#__PURE__*/function (_Component2) {
         });
       });
       return /*#__PURE__*/_react.default.createElement("div", {
-        className:"rdb-popup " + (popupClassName?' ' + popupClassName:'') + (rtl?' rtl':' ltr'),
+        className: "rdb-popup " + (popupClassName ? ' ' + popupClassName : '') + (rtl ? ' rtl' : ' ltr'),
         ref: this.dom,
         style: this.getStyle(),
         onMouseEnter: function onMouseEnter() {

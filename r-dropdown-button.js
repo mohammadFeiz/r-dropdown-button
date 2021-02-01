@@ -30,7 +30,7 @@ class RDropdownButton extends Component {
       var parent = $(e.target).parents('.rdb-popup');
       if(parent.length !== 0 ){return;}
       var {items,onClick = ()=>{}} = this.props;
-      if(items){this.toggle();}
+      if(items){this.toggle(true);}
       else{onClick(this.props);}
     }
     showPopup(){
