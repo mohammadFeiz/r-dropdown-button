@@ -228,7 +228,7 @@ class Popup extends Component{
     return {height:'100%',width:'100%',right:0,top:0,position:'fixed',background:'rgba(0,0,0,0)'}
   }
   render(){
-    var {search,items,toggle,getValue,rtl,hover,className} = this.context;
+    var {search,items,toggle,getValue,rtl,hover,popupClassName} = this.context;
     var popupStyle = getValue(this.context.popupStyle);
     var {searchValue} = this.state;
     var Items = typeof items === 'function'? items(this.context):items.filter((item)=>{

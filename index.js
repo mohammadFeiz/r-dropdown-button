@@ -480,6 +480,7 @@ var Popup = /*#__PURE__*/function (_Component2) {
           getValue = _this$context2.getValue,
           rtl = _this$context2.rtl,
           hover = _this$context2.hover,
+          popupClassName = _this$context2.popupClassName
           className = _this$context2.className;
       var popupStyle = getValue(this.context.popupStyle);
       var searchValue = this.state.searchValue;
