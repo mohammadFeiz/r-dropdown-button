@@ -497,7 +497,7 @@ var Popup = /*#__PURE__*/function (_Component2) {
         });
       });
       return /*#__PURE__*/_react.default.createElement("div", {
-        className: "rdb-popup" + (className ? ' ' + className.trim() + '-popup' : '') + (rtl ? ' rtl' : ' ltr'),
+        className:"rdb-popup " + (popupClassName?' ' + popupClassName:'') + (rtl?' rtl':' ltr'),
         ref: this.dom,
         style: this.getStyle(),
         onMouseEnter: function onMouseEnter() {
