@@ -443,11 +443,6 @@ var Popup = /*#__PURE__*/function (_Component2) {
       this.update();
     }
   }, {
-    key: "componentDidUpdate",
-    value: function componentDidUpdate() {
-      this.update();
-    }
-  }, {
     key: "getStyle",
     value: function getStyle() {
       var rtl = this.context.rtl;

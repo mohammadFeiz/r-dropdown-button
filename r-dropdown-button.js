@@ -214,9 +214,6 @@ class Popup extends Component{
   componentDidMount(){
     this.update();
   }
-  componentDidUpdate(){
-    this.update();
-  }
   getStyle(){
     var {rtl} = this.context;
     return {
