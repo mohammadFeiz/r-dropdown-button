@@ -103,7 +103,7 @@ var RDropdownButton = /*#__PURE__*/function (_Component) {
   }, {
     key: "click",
     value: function click(e) {
-      var parent = (0, _jquery.default)(e.target).parents('.rdb-popup');
+      var parent = (0, _jquery.default)(e.target).parents('.rdb-popup-container');
 
       if (parent.length !== 0) {
         return;
@@ -146,14 +146,14 @@ var RDropdownButton = /*#__PURE__*/function (_Component) {
       if (icon) {
         return /*#__PURE__*/_react.default.createElement("div", {
           className: 'rdb-icon',
-          style: iconStyle
-        }, icon);
+          style: this.getValue(iconStyle)
+        }, this.getValue(icon));
       }
 
       if (iconClass) {
         return /*#__PURE__*/_react.default.createElement("div", {
-          className: 'rdb-icon ' + iconClass,
-          style: iconStyle
+          className: 'rdb-icon ' + this.getValue(iconClass),
+          style: this.getValue(iconStyle)
         });
       }
 
@@ -228,10 +228,8 @@ var RDropdownButton = /*#__PURE__*/function (_Component) {
       var rtl = this.getValue(this.props.rtl);
       var style = this.getValue(this.props.style);
       var icon = this.getValue(this.props.icon);
-      var iconClass = this.getValue(this.props.iconClass);
-      var iconStyle = this.getValue(this.props.iconStyle);
       var text = this.getValue(this.props.text);
-      var Icon = this.getIcon(icon, iconClass, iconStyle);
+      var Icon = this.getIcon(icon, this.props.iconClass, this.props.iconStyle);
       var Text = this.getText(text, Icon);
       var hover = this.getHoverEnabled();
       var contextValue = { ...this.props,
@@ -303,11 +301,6 @@ var Popup = /*#__PURE__*/function (_Component2) {
         width: width,
         height: height
       };
-    }
-  }, {
-    key: "preventScroll",
-    value: function preventScroll(e) {
-      e.preventDefault();
     }
   }, {
     key: "update",
@@ -404,39 +397,7 @@ var Popup = /*#__PURE__*/function (_Component2) {
       }
 
       (0, _jquery.default)('body').addClass('rdb-open');
-    } // update(){
-    //   return;
-    //   var {rtl,openRelatedTo} = this.context;
-    //   var popup = $(this.dom.current);
-    //   var popupWidth = popup.width();
-    //   var popupHeight = popup.height();
-    //   var parent = openRelatedTo?popup.parents(openRelatedTo):undefined;
-    //   parent = Array.isArray(parent) && parent.length === 0?undefined:parent;
-    //   var bodyWidth = parent?parent.width():window.innerWidth;
-    //   var bodyHeight = parent?parent.height():window.innerHeight;
-    //   var offset = popup.offset();
-    //   var popupLeft = offset.left;
-    //   var popupRight = popupLeft + popupWidth;
-    //   var popupTop = offset.top;
-    //   var popupBottom = popupTop + popupHeight;
-    //   if(parent){
-    //     var parentOffset = parent.offset();
-    //     popupLeft -= parentOffset.left;
-    //     popupRight = popupLeft + popupWidth;
-    //     popupTop -= parentOffset.top;
-    //     popupBottom = popupTop + popupHeight;
-    //   }
-    //   if(rtl && popupLeft < 0){
-    //     popup.css('right',popupLeft - 36);
-    //   }
-    //   else if(!rtl && popupRight > bodyWidth){
-    //     popup.css('left', bodyWidth - popupRight - 36);
-    //   }
-    //   if(popupBottom > bodyHeight){
-    //     popup.css({'bottom':'100%','top':'unset'});
-    //   }
-    // }
-
+    }
   }, {
     key: "componentDidMount",
     value: function componentDidMount() {
@@ -447,7 +408,6 @@ var Popup = /*#__PURE__*/function (_Component2) {
     value: function getStyle() {
       var rtl = this.context.rtl;
       return {
-        zIndex: 1000,
         direction: rtl ? 'rtl' : 'ltr'
       };
     }
@@ -492,7 +452,7 @@ var Popup = /*#__PURE__*/function (_Component2) {
         });
       });
       return /*#__PURE__*/_react.default.createElement("div", {
-        className: "rdb-popup " + (popupClassName ? ' ' + popupClassName : '') + (rtl ? ' rtl' : ' ltr'),
+        className: "rdb-popup-container " + (popupClassName ? ' ' + popupClassName : '') + (rtl ? ' rtl' : ' ltr'),
         ref: this.dom,
         style: this.getStyle(),
         onMouseEnter: function onMouseEnter() {
@@ -511,7 +471,7 @@ var Popup = /*#__PURE__*/function (_Component2) {
         },
         style: this.getBackDropStyle()
       }), /*#__PURE__*/_react.default.createElement("div", {
-        className: "rdb-for-drop",
+        className: "rdb-popup",
         style: popupStyle
       }, search && /*#__PURE__*/_react.default.createElement("div", {
         className: "rdb-search"

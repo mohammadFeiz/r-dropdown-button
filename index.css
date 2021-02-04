@@ -91,7 +91,7 @@ body.rdb-open{
   position:absolute;
   right:8px;
 }
-.rdb-popup.rtl .rdb-search-icon{
+.rdb-popup-container.rtl .rdb-search-icon{
   right:unset;
   left:8px;
 }
@@ -123,15 +123,18 @@ body.rdb-open{
 a.rdb-list-item{
   width: fill-available;
 }
-.rdb-popup{
+.rdb-popup-container{
   position:fixed;
-  border : 1px solid #ccc;
-  box-shadow : 4px 4px 8px 0px rgba(0,0,0,.2);
+  z-index:1000000000;
 }
-.rdb-for-drop{
+.rdb-popup{
   position:relative;
   overflow-y : auto;
+  border : 1px solid #ccc;
   background : #fff;
+  border-radius:14px;
+  box-shadow : 4px 4px 8px 0px rgba(0,0,0,.2);
+
 }
 .rdb-check-icon{
   width:16px;
