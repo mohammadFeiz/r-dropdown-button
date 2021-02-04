@@ -77,10 +77,10 @@ body.rdb-open{
 .rdb-search input{
   outline:0;
   z-index:10;
-  border:1px solid #bbb;
+  border:1px solid #ddd;
   color:#666;
   background:none;
-  border-radius:3px;
+  border-radius:16px;
   height: 100%;
   width:100%;
   padding:3px;
@@ -130,11 +130,9 @@ a.rdb-list-item{
 .rdb-popup{
   position:relative;
   overflow-y : auto;
-  border : 1px solid #ccc;
+  border : 1px solid #ddd;
   background : #fff;
-  border-radius:14px;
   box-shadow : 4px 4px 8px 0px rgba(0,0,0,.2);
-
 }
 .rdb-check-icon{
   width:16px;
