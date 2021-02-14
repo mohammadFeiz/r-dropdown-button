@@ -193,7 +193,13 @@ class Popup extends Component{
     var Items = typeof items === 'function'? items(this.context):items.filter((item)=>{
       if(!searchValue){return true;}
       return item.text.indexOf(searchValue) !== -1
-    }).map((item, i)=><ListItem key={i} item={item} index={i}/>)
+    }).map((item, i)=>{
+      if(item.html){
+        return getValue(item.html);
+      }
+      return <ListItem key={i} item={item} index={i}/>
+    })
+    
     return(
       <div className={"rdb-popup-container " + (popupClassName?' ' + popupClassName:'') + (rtl?' rtl':' ltr')} ref={this.dom} style={this.getStyle()} onMouseEnter={()=>{if(hover){toggle(true)}}} onMouseLeave={()=>{if(hover){toggle(false)}}}>
         {!hover && <div onClick={()=>toggle(false)} style={this.getBackDropStyle()}></div>} 
@@ -231,11 +237,7 @@ class ListItem extends Component{
   }
   render(){
     var {item} = this.props; 
-    var {getValue,getIcon,getText,itemStyle,gap = 6,rtl} = this.context;
-    var html = getValue(item.html);
-    if(html){
-      return html;
-    }
+    var {getValue,getIcon,getText,gap = 6,rtl} = this.context;
     var disabled = getValue(item.disabled);
     var text = getValue(item.text);  
     var checked = getValue(item.checked);

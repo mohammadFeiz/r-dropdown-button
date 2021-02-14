@@ -445,6 +445,10 @@ var Popup = /*#__PURE__*/function (_Component2) {
 
         return item.text.indexOf(searchValue) !== -1;
       }).map(function (item, i) {
+        if (item.html) {
+          return getValue(item.html);
+        }
+
         return /*#__PURE__*/_react.default.createElement(ListItem, {
           key: i,
           item: item,
@@ -544,16 +548,9 @@ var ListItem = /*#__PURE__*/function (_Component3) {
           getValue = _this$context4.getValue,
           getIcon = _this$context4.getIcon,
           getText = _this$context4.getText,
-          itemStyle = _this$context4.itemStyle,
           _this$context4$gap = _this$context4.gap,
           gap = _this$context4$gap === void 0 ? 6 : _this$context4$gap,
           rtl = _this$context4.rtl;
-      var html = getValue(item.html);
-
-      if (html) {
-        return html;
-      }
-
       var disabled = getValue(item.disabled);
       var text = getValue(item.text);
       var checked = getValue(item.checked);
