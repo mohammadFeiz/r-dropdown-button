@@ -568,7 +568,7 @@ var ListItem = /*#__PURE__*/function (_Component3) {
       var className = getValue(item.className);
       var props = {
         className: "rdb-list-item".concat(className ? ' ' + className : '').concat(disabled ? ' disabled' : ''),
-        style: getValue(itemStyle),
+        style: getValue(item.style),
         onClick: this.click.bind(this)
       };
       return /*#__PURE__*/_react.default.createElement(_react.Fragment, null, item.splitter && /*#__PURE__*/_react.default.createElement("div", {

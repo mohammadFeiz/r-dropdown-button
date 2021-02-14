@@ -247,7 +247,7 @@ class ListItem extends Component{
     var className = getValue(item.className);
     var props = {
       className:`rdb-list-item${className?' ' + className:''}${disabled?' disabled':''}`,
-      style:getValue(itemStyle),onClick:this.click.bind(this),
+      style:getValue(item.style),onClick:this.click.bind(this),
     }
     return(
       <Fragment>
