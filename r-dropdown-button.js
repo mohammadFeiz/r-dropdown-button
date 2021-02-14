@@ -232,6 +232,10 @@ class ListItem extends Component{
   render(){
     var {item} = this.props; 
     var {getValue,getIcon,getText,itemStyle,gap = 6,rtl} = this.context;
+    var html = getValue(item.html);
+    if(html){
+      return html;
+    }
     var disabled = getValue(item.disabled);
     var text = getValue(item.text);  
     var checked = getValue(item.checked);

@@ -548,6 +548,12 @@ var ListItem = /*#__PURE__*/function (_Component3) {
           _this$context4$gap = _this$context4.gap,
           gap = _this$context4$gap === void 0 ? 6 : _this$context4$gap,
           rtl = _this$context4.rtl;
+      var html = getValue(item.html);
+
+      if (html) {
+        return html;
+      }
+
       var disabled = getValue(item.disabled);
       var text = getValue(item.text);
       var checked = getValue(item.checked);
