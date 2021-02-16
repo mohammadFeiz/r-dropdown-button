@@ -438,7 +438,8 @@ var Popup = /*#__PURE__*/function (_Component2) {
           popupClassName = _this$context2.popupClassName;
       var popupStyle = getValue(this.context.popupStyle);
       var searchValue = this.state.searchValue;
-      var Items = typeof items === 'function' ? items(this.context) : items.filter(function (item) {
+      var content = typeof items === 'function' ? items(this.context) : items;
+      var Items = !Array.isArray(content) ? content : content.filter(function (item) {
         if (!searchValue) {
           return true;
         }
@@ -571,7 +572,7 @@ var ListItem = /*#__PURE__*/function (_Component3) {
       var className = getValue(item.className);
       var props = {
         className: "rdb-list-item".concat(className ? ' ' + className : '').concat(disabled ? ' disabled' : ''),
-        style: getValue(item.style),
+        style: getValue(item.style),title:'',
         onClick: this.click.bind(this)
       };
       return /*#__PURE__*/_react.default.createElement(_react.Fragment, null, item.splitter && /*#__PURE__*/_react.default.createElement("div", {

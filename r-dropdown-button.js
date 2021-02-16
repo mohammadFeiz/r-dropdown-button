@@ -190,7 +190,8 @@ class Popup extends Component{
     var {search,items,toggle,getValue,rtl,hover,popupClassName} = this.context;
     var popupStyle = getValue(this.context.popupStyle);
     var {searchValue} = this.state;
-    var Items = typeof items === 'function'? items(this.context):items.filter((item)=>{
+    var content = typeof items === 'function'?items(this.context):items;
+    var Items = !Array.isArray(content)? content:content.filter((item)=>{
       if(!searchValue){return true;}
       return item.text.indexOf(searchValue) !== -1
     }).map((item, i)=>{
@@ -253,7 +254,7 @@ class ListItem extends Component{
     var className = getValue(item.className);
     var props = {
       className:`rdb-list-item${className?' ' + className:''}${disabled?' disabled':''}`,
-      style:getValue(item.style),onClick:this.click.bind(this),
+      style:getValue(item.style),onClick:this.click.bind(this),title:''
     }
     return(
       <Fragment>
