@@ -447,7 +447,9 @@ var Popup = /*#__PURE__*/function (_Component2) {
         return item.text.indexOf(searchValue) !== -1;
       }).map(function (item, i) {
         if (item.html) {
-          return getValue(item.html);
+          return /*#__PURE__*/_react.default.createElement(_react.Fragment, {
+            key: i
+          }, getValue(item.html));
         }
 
         return /*#__PURE__*/_react.default.createElement(ListItem, {
@@ -572,8 +574,9 @@ var ListItem = /*#__PURE__*/function (_Component3) {
       var className = getValue(item.className);
       var props = {
         className: "rdb-list-item".concat(className ? ' ' + className : '').concat(disabled ? ' disabled' : ''),
-        style: getValue(item.style),title:'',
-        onClick: this.click.bind(this)
+        style: getValue(item.style),
+        onClick: this.click.bind(this),
+        title: ''
       };
       return /*#__PURE__*/_react.default.createElement(_react.Fragment, null, item.splitter && /*#__PURE__*/_react.default.createElement("div", {
         className: 'rdb-splitter ' + (rtl ? 'rtl' : 'ltr')

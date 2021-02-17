@@ -196,7 +196,7 @@ class Popup extends Component{
       return item.text.indexOf(searchValue) !== -1
     }).map((item, i)=>{
       if(item.html){
-        return getValue(item.html);
+        return <Fragment key={i}>{getValue(item.html)}</Fragment>;
       }
       return <ListItem key={i} item={item} index={i}/>
     })
