@@ -203,7 +203,7 @@ class Popup extends Component{
     
     return(
       <div className={"rdb-popup-container " + (popupClassName?' ' + popupClassName:'') + (rtl?' rtl':' ltr')} ref={this.dom} style={this.getStyle()} onMouseEnter={()=>{if(hover){toggle(true)}}} onMouseLeave={()=>{if(hover){toggle(false)}}}>
-        {!hover && <div onClick={()=>toggle(false)} style={this.getBackDropStyle()}></div>} 
+        {!hover && <div className='rdb-backdrop' onClick={()=>toggle(false)} style={this.getBackDropStyle()}></div>} 
         <div className="rdb-popup" style={popupStyle}>
           {
             search && 

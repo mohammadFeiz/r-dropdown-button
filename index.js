@@ -473,6 +473,7 @@ var Popup = /*#__PURE__*/function (_Component2) {
           }
         }
       }, !hover && /*#__PURE__*/_react.default.createElement("div", {
+        className: "rdb-backdrop",
         onClick: function onClick() {
           return toggle(false);
         },
