@@ -41,7 +41,7 @@ function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) ===
 
 function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
 
-function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Date.prototype.toString.call(Reflect.construct(Date, [], function () {})); return true; } catch (e) { return false; } }
+function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); return true; } catch (e) { return false; } }
 
 function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
 
@@ -161,7 +161,7 @@ var RDropdownButton = /*#__PURE__*/function (_Component) {
     }
   }, {
     key: "getBadge",
-    value: function getBadge() {
+    value: function getBadge(badge) {
       if (badge === undefined) {
         return null;
       }
@@ -232,6 +232,7 @@ var RDropdownButton = /*#__PURE__*/function (_Component) {
       var Icon = this.getIcon(icon, this.props.iconClass, this.props.iconStyle);
       var Text = this.getText(text, Icon);
       var hover = this.getHoverEnabled();
+      var badge = this.getValue(this.props.badge);
       var contextValue = { ...this.props,
         getIcon: this.getIcon.bind(this),
         getText: this.getText.bind(this)
@@ -258,7 +259,7 @@ var RDropdownButton = /*#__PURE__*/function (_Component) {
       };
       return /*#__PURE__*/_react.default.createElement(dpContext.Provider, {
         value: contextValue
-      }, /*#__PURE__*/_react.default.createElement("button", props, this.getBadge(), Icon, Text), this.showPopup() && /*#__PURE__*/_react.default.createElement(Popup, null));
+      }, /*#__PURE__*/_react.default.createElement("button", props, this.getBadge(badge), Icon, Text), this.showPopup() && /*#__PURE__*/_react.default.createElement(Popup, null));
     }
   }]);
 

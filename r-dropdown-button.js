@@ -50,7 +50,7 @@ class RDropdownButton extends Component {
       }
       return null;
     }
-    getBadge(){
+    getBadge(badge){
       if(badge === undefined){return null;}
       var badge = parseInt(this.getValue(this.props.badge));  
       if(isNaN(badge)){console.error('RDropdownButton => badge props is not an number'); return null;}
@@ -86,6 +86,7 @@ class RDropdownButton extends Component {
         var Icon = this.getIcon(icon,this.props.iconClass,this.props.iconStyle);
         var Text = this.getText(text,Icon); 
         var hover = this.getHoverEnabled();
+        var badge = this.getValue(this.props.badge);
         var contextValue = {...this.props,getIcon:this.getIcon.bind(this),getText:this.getText.bind(this)};
         contextValue.toggle = this.toggle.bind(this);
         contextValue.getValue = this.getValue.bind(this);
@@ -102,7 +103,7 @@ class RDropdownButton extends Component {
         }
         return (
           <dpContext.Provider value={contextValue}>
-              <button {...props}>{this.getBadge()}{Icon}{Text}</button>
+              <button {...props}>{this.getBadge(badge)}{Icon}{Text}</button>
               {this.showPopup() && <Popup />}
           </dpContext.Provider>
         );
