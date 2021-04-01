@@ -27,8 +27,6 @@ class RDropdownButton extends Component {
     }
     getValue(value){return typeof value === 'function' ? value(this.props):value;}
     click(e){
-      var parent = $(e.target).parents('.rdb-popup-container');
-      if(parent.length !== 0 ){return;}
       var {items,onClick = ()=>{}} = this.props;
       if(items){this.toggle(true);}
       else{onClick(this.props);}

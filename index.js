@@ -103,12 +103,6 @@ var RDropdownButton = /*#__PURE__*/function (_Component) {
   }, {
     key: "click",
     value: function click(e) {
-      var parent = (0, _jquery.default)(e.target).parents('.rdb-popup-container');
-
-      if (parent.length !== 0) {
-        return;
-      }
-
       var _this$props = this.props,
           items = _this$props.items,
           _this$props$onClick = _this$props.onClick,
