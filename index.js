@@ -17,9 +17,9 @@ require("./index.css");
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function _getRequireWildcardCache() { return cache; }; return cache; }
+function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
 
-function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
+function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
 
 function _extends() { _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends.apply(this, arguments); }
 
@@ -59,7 +59,8 @@ var RDropdownButton = /*#__PURE__*/function (_Component) {
 
     _this = _super.call(this, props);
     _this.state = {
-      open: _this.props.open || false
+      open: _this.props.open || false,
+      searchValue: ''
     };
     _this.dom = /*#__PURE__*/(0, _react.createRef)();
     _this.touch = 'ontouchstart' in document.documentElement;
@@ -79,7 +80,8 @@ var RDropdownButton = /*#__PURE__*/function (_Component) {
         }
 
         _this2.setState({
-          open: state
+          open: state,
+          searchValue: ''
         });
 
         if (state) {
@@ -103,6 +105,10 @@ var RDropdownButton = /*#__PURE__*/function (_Component) {
   }, {
     key: "click",
     value: function click(e) {
+      if ((0, _jquery.default)(e.target).parents('.rdb-checkeds').length !== 0) {
+        return;
+      }
+
       var _this$props = this.props,
           items = _this$props.items,
           _this$props$onClick = _this$props.onClick,
@@ -124,11 +130,7 @@ var RDropdownButton = /*#__PURE__*/function (_Component) {
         return false;
       }
 
-      if (Array.isArray(items)) {
-        return true;
-      }
-
-      if (typeof items === 'function') {
+      if (items !== undefined) {
         return true;
       }
 
@@ -211,6 +213,64 @@ var RDropdownButton = /*#__PURE__*/function (_Component) {
       return this.getValue(this.props.hover);
     }
   }, {
+    key: "itemClick",
+    value: function itemClick(index, e) {
+      if ((0, _jquery.default)(e.target).parents('.rdb-after').length !== 0) {
+        return;
+      }
+
+      var item = this.items[index];
+      var _this$props2 = this.props,
+          onClick = _this$props2.onClick,
+          checkField = _this$props2.checkField;
+      var disabled = this.getValue(item.disabled);
+
+      if (disabled) {
+        return;
+      }
+
+      var checked = this.getValue(item[checkField]);
+
+      if (item.onClick) {
+        item.onClick(item, index, this.context);
+      } else if (onClick) {
+        onClick(item, index, this.context);
+      }
+
+      if (item.close !== false && checked === undefined) {
+        this.toggle();
+      }
+    }
+  }, {
+    key: "getCaret",
+    value: function getCaret() {
+      var _this$props3 = this.props,
+          items = _this$props3.items,
+          caret = _this$props3.caret;
+
+      if (!items || !caret) {
+        return '';
+      }
+
+      if (caret === true) {
+        return /*#__PURE__*/_react.default.createElement(_react.Fragment, null, /*#__PURE__*/_react.default.createElement("div", {
+          style: {
+            flex: 1
+          }
+        }), /*#__PURE__*/_react.default.createElement("div", {
+          className: "rdb-caret default"
+        }));
+      }
+
+      if (typeof caret === 'string') {
+        return /*#__PURE__*/_react.default.createElement("div", {
+          className: caret
+        });
+      }
+
+      return caret;
+    }
+  }, {
     key: "render",
     value: function render() {
       var _this3 = this;
@@ -227,12 +287,67 @@ var RDropdownButton = /*#__PURE__*/function (_Component) {
       var Text = this.getText(text, Icon);
       var hover = this.getHoverEnabled();
       var badge = this.getValue(this.props.badge);
+
+      var _this$props4 = this.props,
+          items = _this$props4.items,
+          type = _this$props4.type,
+          _this$props4$onClick = _this$props4.onClick,
+          _onClick = _this$props4$onClick === void 0 ? function () {} : _this$props4$onClick,
+          checkField = _this$props4.checkField,
+          caret = _this$props4.caret;
+
+      var searchValue = this.state.searchValue;
+      var content = typeof items === 'function' ? items(this.context) : items;
+      var checks = [];
+      var Items;
+
+      if (!Array.isArray(content)) {
+        Items = content;
+      } else {
+        var filteredItems = content.filter(function (item) {
+          if (item[checkField]) {
+            checks.push(item);
+          }
+
+          if (!searchValue) {
+            return true;
+          }
+
+          if (item.text === undefined) {
+            return true;
+          }
+
+          return item.text.indexOf(searchValue) !== -1;
+        });
+        this.items = filteredItems;
+        Items = filteredItems.map(function (item, i) {
+          if (item.html) {
+            return /*#__PURE__*/_react.default.createElement(_react.Fragment, {
+              key: i
+            }, _this3.getValue(item.html));
+          }
+
+          return /*#__PURE__*/_react.default.createElement(ListItem, {
+            key: i,
+            item: item,
+            index: i
+          });
+        });
+      }
+
       var contextValue = { ...this.props,
+        items: Items,
         getIcon: this.getIcon.bind(this),
         getText: this.getText.bind(this)
       };
       contextValue.toggle = this.toggle.bind(this);
+
+      contextValue.SetState = function (obj) {
+        return _this3.setState(obj);
+      };
+
       contextValue.getValue = this.getValue.bind(this);
+      contextValue.itemClick = this.itemClick.bind(this);
       contextValue.hover = hover;
       var props = {
         id: id,
@@ -249,16 +364,43 @@ var RDropdownButton = /*#__PURE__*/function (_Component) {
         } : undefined,
         onMouseLeave: hover ? function () {
           return _this3.toggle(false);
-        } : undefined
+        } : undefined,
+        tabIndex: 0
       };
+      var Caret = this.getCaret();
+      var Badge = this.getBadge(badge);
       return /*#__PURE__*/_react.default.createElement(dpContext.Provider, {
         value: contextValue
-      }, /*#__PURE__*/_react.default.createElement("button", props, this.getBadge(badge), Icon, Text), this.showPopup() && /*#__PURE__*/_react.default.createElement(Popup, null));
+      }, type === 'multiselect' && /*#__PURE__*/_react.default.createElement("div", {
+        className: "rdb-multiselect",
+        style: {
+          width: props.style.width
+        }
+      }, /*#__PURE__*/_react.default.createElement("button", props, Icon, " ", Text, " ", Caret, " ", Badge), checks.length !== 0 && /*#__PURE__*/_react.default.createElement("div", {
+        className: 'rdb-checkeds' + (rtl ? ' rtl' : '')
+      }, checks.map(function (check) {
+        return /*#__PURE__*/_react.default.createElement("div", {
+          className: "rdb-checked",
+          onClick: function onClick() {
+            return _onClick(check);
+          }
+        }, /*#__PURE__*/_react.default.createElement("div", {
+          className: "rdb-checked-close"
+        }), /*#__PURE__*/_react.default.createElement("div", {
+          className: "rdb-checked-text"
+        }, check.text));
+      }))), type !== 'multiselect' && /*#__PURE__*/_react.default.createElement("button", props, Icon, " ", Text, " ", Caret, " ", Badge), this.showPopup() && /*#__PURE__*/_react.default.createElement(Popup, {
+        ref: this.popup
+      }));
     }
   }]);
 
   return RDropdownButton;
 }(_react.Component);
+
+RDropdownButton.defaultProps = {
+  checkField: 'checked'
+};
 
 var Popup = /*#__PURE__*/function (_Component2) {
   _inherits(Popup, _Component2);
@@ -272,9 +414,7 @@ var Popup = /*#__PURE__*/function (_Component2) {
 
     _this4 = _super2.call(this, props);
     _this4.dom = /*#__PURE__*/(0, _react.createRef)();
-    _this4.state = {
-      searchValue: ''
-    };
+    _this4.activeIndex = false;
     return _this4;
   }
 
@@ -303,10 +443,11 @@ var Popup = /*#__PURE__*/function (_Component2) {
       var _this$context = this.context,
           rtl = _this$context.rtl,
           openRelatedTo = _this$context.openRelatedTo,
-          close = _this$context.close,
-          animate = _this$context.animate;
+          animate = _this$context.animate,
+          dropdownType = _this$context.dropdownType,
+          type = _this$context.type;
       var popup = (0, _jquery.default)(this.dom.current);
-      var button = popup.prev();
+      var button = type === 'multiselect' ? popup.prev().find('.r-dropdown-button') : popup.prev();
       var parent = openRelatedTo ? popup.parents(openRelatedTo) : undefined;
       parent = Array.isArray(parent) && parent.length === 0 ? undefined : parent;
       var bodyWidth = window.innerWidth;
@@ -341,12 +482,17 @@ var Popup = /*#__PURE__*/function (_Component2) {
           top,
           bottom,
           style = {};
+      top = buttonLimit.bottom;
+      bottom = top + popupLimit.height;
 
-      if (rtl) {
+      if (dropdownType === 'fit') {
+        style.left = buttonLimit.left;
+        style.width = buttonLimit.width;
+      } else if (dropdownType === 'center') {
+        style.left = "calc(50% - ".concat(popupLimit.width / 2, "px)");
+      } else if (rtl) {
         right = buttonLimit.right;
-        top = buttonLimit.bottom;
         left = right - popupLimit.width;
-        bottom = top + popupLimit.height;
 
         if (left < parentLimit.left) {
           style.left = parentLimit.left;
@@ -355,9 +501,7 @@ var Popup = /*#__PURE__*/function (_Component2) {
         }
       } else {
         left = buttonLimit.left;
-        top = buttonLimit.bottom;
         right = left + popupLimit.width;
-        bottom = top + popupLimit.height;
 
         if (right > parentLimit.right) {
           style.left = parentLimit.right - popupLimit.width;
@@ -366,7 +510,9 @@ var Popup = /*#__PURE__*/function (_Component2) {
         }
       }
 
-      if (bottom > parentLimit.bottom) {
+      if (dropdownType === 'center') {
+        style.top = "calc(50% - ".concat(popupLimit.height / 2, "px)");
+      } else if (bottom > parentLimit.bottom) {
         if (popupLimit.height > buttonLimit.top - parentLimit.top) {
           style.top = parentLimit.bottom - popupLimit.height;
         } else {
@@ -391,6 +537,7 @@ var Popup = /*#__PURE__*/function (_Component2) {
         popup.css(style);
       }
 
+      popup.focus();
       (0, _jquery.default)('body').addClass('rdb-open');
     }
   }, {
@@ -409,14 +556,73 @@ var Popup = /*#__PURE__*/function (_Component2) {
   }, {
     key: "getBackDropStyle",
     value: function getBackDropStyle() {
+      var backdropStyle = this.context.backdropStyle;
       return {
         height: '100%',
         width: '100%',
         right: 0,
         top: 0,
         position: 'fixed',
-        background: 'rgba(0,0,0,0)'
+        background: 'rgba(0,0,0,0)',
+        ...backdropStyle
       };
+    }
+  }, {
+    key: "keyDown",
+    value: function keyDown(e) {
+      console.log(e.keyCode);
+
+      if (e.keyCode === 40) {
+        e.preventDefault();
+        var items = (0, _jquery.default)(this.dom.current).find('.rdb-list-item');
+        var active = items.filter('.active');
+
+        if (active.length === 0) {
+          this.activeIndex = 0;
+          items.eq(0).addClass('active');
+        } else {
+          var index = active.attr('dataindex');
+          index++;
+
+          if (index >= items.length) {
+            index = 0;
+          }
+
+          items.removeClass('active');
+          this.activeIndex = index;
+          items.eq(index).addClass('active').focus();
+        }
+      } else if (e.keyCode === 38) {
+        e.preventDefault();
+        var items = (0, _jquery.default)(this.dom.current).find('.rdb-list-item');
+        var active = items.filter('.active');
+
+        if (active.length === 0) {
+          this.activeIndex = items.length - 1;
+          items.eq(items.length - 1).addClass('active');
+        } else {
+          var _index = active.attr('dataindex');
+
+          _index--;
+
+          if (_index < 0) {
+            _index = items.length - 1;
+          }
+
+          items.removeClass('active');
+          this.activeIndex = _index;
+          items.eq(_index).addClass('active').focus();
+        }
+      } else if (e.keyCode === 13) {
+        var itemClick = this.context.itemClick;
+
+        if (this.activeIndex !== false) {
+          itemClick(this.activeIndex);
+        }
+      } else if (e.keyCode === 27) {
+        var toggle = this.context.toggle;
+        toggle();
+      }
     }
   }, {
     key: "render",
@@ -430,29 +636,11 @@ var Popup = /*#__PURE__*/function (_Component2) {
           getValue = _this$context2.getValue,
           rtl = _this$context2.rtl,
           hover = _this$context2.hover,
-          popupClassName = _this$context2.popupClassName;
+          popupClassName = _this$context2.popupClassName,
+          searchValue = _this$context2.searchValue,
+          SetState = _this$context2.SetState,
+          placeHolder = _this$context2.placeHolder;
       var popupStyle = getValue(this.context.popupStyle);
-      var searchValue = this.state.searchValue;
-      var content = typeof items === 'function' ? items(this.context) : items;
-      var Items = !Array.isArray(content) ? content : content.filter(function (item) {
-        if (!searchValue) {
-          return true;
-        }
-
-        return item.text.indexOf(searchValue) !== -1;
-      }).map(function (item, i) {
-        if (item.html) {
-          return /*#__PURE__*/_react.default.createElement(_react.Fragment, {
-            key: i
-          }, getValue(item.html));
-        }
-
-        return /*#__PURE__*/_react.default.createElement(ListItem, {
-          key: i,
-          item: item,
-          index: i
-        });
-      });
       return /*#__PURE__*/_react.default.createElement("div", {
         className: "rdb-popup-container " + (popupClassName ? ' ' + popupClassName : '') + (rtl ? ' rtl' : ' ltr'),
         ref: this.dom,
@@ -466,7 +654,9 @@ var Popup = /*#__PURE__*/function (_Component2) {
           if (hover) {
             toggle(false);
           }
-        }
+        },
+        onKeyDown: this.keyDown.bind(this),
+        tabIndex: 0
       }, !hover && /*#__PURE__*/_react.default.createElement("div", {
         className: "rdb-backdrop",
         onClick: function onClick() {
@@ -479,21 +669,29 @@ var Popup = /*#__PURE__*/function (_Component2) {
       }, search && /*#__PURE__*/_react.default.createElement("div", {
         className: "rdb-search"
       }, /*#__PURE__*/_react.default.createElement("div", {
-        className: "rdb-search-icon"
+        className: 'rdb-search-icon' + (searchValue ? ' rdb-search-icon-filled' : ''),
+        onClick: function onClick() {
+          _this5.setState({
+            searchValue: ''
+          });
+        }
       }), /*#__PURE__*/_react.default.createElement("input", {
         type: "text",
         value: searchValue,
+        placeholder: placeHolder,
         onChange: function onChange(e) {
           if (typeof search === 'function') {
             search(e.target.value);
             return;
           }
 
-          _this5.setState({
+          SetState({
             searchValue: e.target.value
           });
         }
-      })), Items));
+      })), /*#__PURE__*/_react.default.createElement("div", {
+        className: "rdb-items"
+      }, items)));
     }
   }]);
 
@@ -514,52 +712,57 @@ var ListItem = /*#__PURE__*/function (_Component3) {
   }
 
   _createClass(ListItem, [{
-    key: "click",
-    value: function click() {
-      var _this$props2 = this.props,
-          item = _this$props2.item,
-          index = _this$props2.index;
-      var _this$context3 = this.context,
-          toggle = _this$context3.toggle,
-          onClick = _this$context3.onClick,
-          getValue = _this$context3.getValue;
-      var disabled = getValue(item.disabled);
-
-      if (disabled) {
-        return;
+    key: "getText",
+    value: function getText(text, icon) {
+      if (text === undefined || text === '') {
+        return '';
       }
 
-      if (item.onClick) {
-        item.onClick(item, index, this.context);
-      } else if (onClick) {
-        onClick(item, index, this.context);
+      if (icon === null) {
+        return /*#__PURE__*/_react.default.createElement("div", {
+          className: "rdb-text",
+          title: text
+        }, text);
       }
 
-      if (item.close !== false) {
-        toggle();
-      }
+      var _this$props$gap2 = this.props.gap,
+          gap = _this$props$gap2 === void 0 ? 6 : _this$props$gap2;
+      return /*#__PURE__*/_react.default.createElement(_react.Fragment, null, /*#__PURE__*/_react.default.createElement("div", {
+        className: "rdb-gap",
+        style: {
+          width: gap
+        }
+      }), /*#__PURE__*/_react.default.createElement("div", {
+        className: "rdb-text",
+        title: text
+      }, text));
     }
   }, {
     key: "render",
     value: function render() {
-      var item = this.props.item;
-      var _this$context4 = this.context,
-          getValue = _this$context4.getValue,
-          getIcon = _this$context4.getIcon,
-          getText = _this$context4.getText,
-          _this$context4$gap = _this$context4.gap,
-          gap = _this$context4$gap === void 0 ? 6 : _this$context4$gap,
-          rtl = _this$context4.rtl;
+      var _this$props5 = this.props,
+          item = _this$props5.item,
+          index = _this$props5.index;
+      var _this$context3 = this.context,
+          getValue = _this$context3.getValue,
+          getIcon = _this$context3.getIcon,
+          itemClick = _this$context3.itemClick,
+          _this$context3$gap = _this$context3.gap,
+          gap = _this$context3$gap === void 0 ? 8 : _this$context3$gap,
+          rtl = _this$context3.rtl,
+          checkField = _this$context3.checkField;
       var disabled = getValue(item.disabled);
       var text = getValue(item.text);
-      var checked = getValue(item.checked);
+      var checked = getValue(item[checkField]);
+      var after = getValue(item.after);
+      var After = after ? /*#__PURE__*/_react.default.createElement("div", {
+        className: "rdb-after"
+      }, after) : '';
+      this.checked = checked;
       var Icon = getIcon(item.icon, item.iconClass, item.iconStyle);
-      var Text = getText(text, Icon);
+      var Text = this.getText(text, Icon);
       var CheckIcon = checked !== undefined ? /*#__PURE__*/_react.default.createElement(_react.Fragment, null, /*#__PURE__*/_react.default.createElement("div", {
-        className: "rdb-check-icon",
-        style: {
-          opacity: checked ? 1 : 0
-        }
+        className: 'rdb-check-icon' + (checked ? ' checked' : '')
       }), /*#__PURE__*/_react.default.createElement("div", {
         className: "rdb-gap",
         style: {
@@ -571,14 +774,18 @@ var ListItem = /*#__PURE__*/function (_Component3) {
       var props = {
         className: "rdb-list-item".concat(className ? ' ' + className : '').concat(disabled ? ' disabled' : ''),
         style: getValue(item.style),
-        onClick: this.click.bind(this),
-        title: ''
+        onClick: function onClick(e) {
+          return itemClick(index, e);
+        },
+        title: '',
+        dataindex: index,
+        tabIndex: 0
       };
       return /*#__PURE__*/_react.default.createElement(_react.Fragment, null, item.splitter && /*#__PURE__*/_react.default.createElement("div", {
         className: 'rdb-splitter ' + (rtl ? 'rtl' : 'ltr')
       }, item.splitter), href ? /*#__PURE__*/_react.default.createElement("a", _extends({
         href: href
-      }, props), Icon, Text) : /*#__PURE__*/_react.default.createElement("div", props, CheckIcon, Icon, Text));
+      }, props), Icon, Text, After) : /*#__PURE__*/_react.default.createElement("div", props, CheckIcon, Icon, Text, After));
     }
   }]);
 
