@@ -73,7 +73,7 @@ class RDropdownButton extends Component {
       return this.getValue(this.props.hover);
     }
     itemClick(index,e){
-      if($(e.target).parents('.rdb-after').length !== 0){return;}
+      if($(e.target).parents('.rdb-list-item-after').length !== 0){return;}
       var item = this.items[index];
       var {onClick,checkField} = this.props;
       var disabled = this.getValue(item.disabled);
@@ -105,6 +105,9 @@ class RDropdownButton extends Component {
         var Text = this.getText(text,Icon); 
         var hover = this.getHoverEnabled();
         var badge = this.getValue(this.props.badge);
+        var after = this.getValue(this.props.after);
+        var After = after?<div className='rdb-after'>{after}</div>:'';
+    
         var {items,type,onClick=()=>{},checkField,caret} = this.props;
         var {searchValue} = this.state;
         var content = typeof items === 'function'?items(this.context):items;
@@ -150,7 +153,7 @@ class RDropdownButton extends Component {
               {
                 type === 'multiselect' &&
                 <div className='rdb-multiselect' style={{width:props.style.width}}>
-                  <button {...props}>{Icon} {Text} {Caret} {Badge}</button>
+                  <button {...props}>{Icon} {Text} {Caret} {after} {Badge}</button>
                   {
                     checks.length !== 0 &&
                     <div className={'rdb-checkeds' + (rtl?' rtl':'')}>
@@ -166,7 +169,7 @@ class RDropdownButton extends Component {
                 </div>
                 
               }
-              {type !== 'multiselect' && <button {...props}>{Icon} {Text} {Caret} {Badge}</button>}
+              {type !== 'multiselect' && <button {...props}>{Icon} {Text} {Caret} {after}{Badge}</button>}
               {this.showPopup() && <Popup ref={this.popup}/>}
               
           </dpContext.Provider>
@@ -364,7 +367,7 @@ class ListItem extends Component{
     var text = getValue(item.text);  
     var checked = getValue(item[checkField]);
     var after = getValue(item.after);
-    var After = after?<div className='rdb-after'>{after}</div>:'';
+    var After = after?<div className='rdb-list-item-after'>{after}</div>:'';
     this.checked = checked;
     var Icon = getIcon(item.icon,item.iconClass,item.iconStyle);
     var Text = this.getText(text,Icon);     

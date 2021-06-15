@@ -215,7 +215,7 @@ var RDropdownButton = /*#__PURE__*/function (_Component) {
   }, {
     key: "itemClick",
     value: function itemClick(index, e) {
-      if ((0, _jquery.default)(e.target).parents('.rdb-after').length !== 0) {
+      if ((0, _jquery.default)(e.target).parents('.rdb-list-item-after').length !== 0) {
         return;
       }
 
@@ -287,6 +287,10 @@ var RDropdownButton = /*#__PURE__*/function (_Component) {
       var Text = this.getText(text, Icon);
       var hover = this.getHoverEnabled();
       var badge = this.getValue(this.props.badge);
+      var after = this.getValue(this.props.after);
+      var After = after ? /*#__PURE__*/_react.default.createElement("div", {
+        className: "rdb-after"
+      }, after) : '';
 
       var _this$props4 = this.props,
           items = _this$props4.items,
@@ -376,7 +380,7 @@ var RDropdownButton = /*#__PURE__*/function (_Component) {
         style: {
           width: props.style.width
         }
-      }, /*#__PURE__*/_react.default.createElement("button", props, Icon, " ", Text, " ", Caret, " ", Badge), checks.length !== 0 && /*#__PURE__*/_react.default.createElement("div", {
+      }, /*#__PURE__*/_react.default.createElement("button", props, Icon, " ", Text, " ", Caret, " ", after, " ", Badge), checks.length !== 0 && /*#__PURE__*/_react.default.createElement("div", {
         className: 'rdb-checkeds' + (rtl ? ' rtl' : '')
       }, checks.map(function (check) {
         return /*#__PURE__*/_react.default.createElement("div", {
@@ -389,7 +393,7 @@ var RDropdownButton = /*#__PURE__*/function (_Component) {
         }), /*#__PURE__*/_react.default.createElement("div", {
           className: "rdb-checked-text"
         }, check.text));
-      }))), type !== 'multiselect' && /*#__PURE__*/_react.default.createElement("button", props, Icon, " ", Text, " ", Caret, " ", Badge), this.showPopup() && /*#__PURE__*/_react.default.createElement(Popup, {
+      }))), type !== 'multiselect' && /*#__PURE__*/_react.default.createElement("button", props, Icon, " ", Text, " ", Caret, " ", after, Badge), this.showPopup() && /*#__PURE__*/_react.default.createElement(Popup, {
         ref: this.popup
       }));
     }
@@ -756,7 +760,7 @@ var ListItem = /*#__PURE__*/function (_Component3) {
       var checked = getValue(item[checkField]);
       var after = getValue(item.after);
       var After = after ? /*#__PURE__*/_react.default.createElement("div", {
-        className: "rdb-after"
+        className: "rdb-list-item-after"
       }, after) : '';
       this.checked = checked;
       var Icon = getIcon(item.icon, item.iconClass, item.iconStyle);
